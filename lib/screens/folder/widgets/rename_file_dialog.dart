@@ -58,7 +58,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -71,7 +71,8 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                         ),
                       ),
                       side: MaterialStateProperty.all(
-                        BorderSide(color: Theme.of(context).accentColor),
+                        BorderSide(
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                     ),
                   ),
@@ -101,6 +102,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                                 Dialogs.showToast(
                                     'Cannot write to this device!');
                               }
+                              return File("");
                             });
                           } else {
                             Dialogs.showToast(
@@ -124,6 +126,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                                 Dialogs.showToast(
                                     'Cannot write to this device!');
                               }
+                              return Directory("");
                             });
                           }
                         }
@@ -132,7 +135,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).accentColor),
+                          Theme.of(context).colorScheme.secondary),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),

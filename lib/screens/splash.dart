@@ -43,17 +43,18 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     startTimeout();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: SystemUiOverlay.values);
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Theme.of(context).primaryColor,
-        systemNavigationBarColor: Colors.black,
-        statusBarIconBrightness:
-            Theme.of(context).primaryColor == ThemeConfig.darkTheme.primaryColor
-                ? Brightness.light
-                : Brightness.dark,
+        systemNavigationBarColor: Theme.of(context).colorScheme.background,
+        // statusBarIconBrightness:
+        //     Theme.of(context).brightness == Brightness.dark
+        //         ? Brightness.light
+        //         : Brightness.dark,
       ));
     });
   }
@@ -68,14 +69,14 @@ class _SplashState extends State<Splash> {
           children: <Widget>[
             Icon(
               Feather.folder,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               size: 70.0,
             ),
             SizedBox(height: 20.0),
             Text(
               '${AppStrings.appName}',
               style: TextStyle(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),

@@ -4,7 +4,7 @@ import 'package:filex/utils/utils.dart';
 import 'package:filex/widgets/file_icon.dart';
 import 'package:filex/widgets/file_popup.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 
 class FileItem extends StatelessWidget {
@@ -20,7 +20,7 @@ class FileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => OpenFile.open(file.path),
+      onTap: () => OpenFilex.open(file.path),
       contentPadding: EdgeInsets.all(0),
       leading: FileIcon(file: file),
       title: Text(

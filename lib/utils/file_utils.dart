@@ -148,7 +148,6 @@ class FileUtils {
   static List<FileSystemEntity> sortList(
       List<FileSystemEntity> list, int sort) {
     switch (sort) {
-
       /// Sort by name
       case 0:
         list.sort((f1, f2) => basename(f1.path)

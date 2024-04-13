@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:filex/providers/providers.dart';
 import 'package:filex/screens/apps_screen.dart';
 import 'package:filex/screens/category.dart';
@@ -213,7 +212,7 @@ class _RecentFiles extends StatelessWidget {
             return file.existsSync() ? FileItem(file: file) : SizedBox();
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Container(
+            return Divider(
               height: 1,
               color: Theme.of(context).dividerColor,
             );

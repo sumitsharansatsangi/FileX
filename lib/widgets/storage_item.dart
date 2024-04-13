@@ -56,7 +56,7 @@ class StorageItem extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14.0,
-              color: Theme.of(context).textTheme.headline1!.color,
+              color: Theme.of(context).textTheme.displayLarge!.color,
             ),
           ),
         ],

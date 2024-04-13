@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:filex/providers/providers.dart';
 import 'package:filex/utils/utils.dart';
-import 'package:filex/widgets/file_icon.dart';
 import 'package:filex/widgets/widgets.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
 class Images extends StatefulWidget {
@@ -52,10 +50,10 @@ class _ImagesState extends State<Images> {
             appBar: AppBar(
               title: Text('${widget.title}'),
               bottom: TabBar(
-                indicatorColor: Theme.of(context).accentColor,
-                labelColor: Theme.of(context).accentColor,
+                indicatorColor: Theme.of(context).colorScheme.secondary,
+                labelColor: Theme.of(context).colorScheme.secondary,
                 unselectedLabelColor:
-                    Theme.of(context).textTheme.caption!.color,
+                    Theme.of(context).textTheme.bodySmall!.color,
                 isScrollable: provider.imageTabs.length < 3 ? false : true,
                 tabs: Constants.map<Widget>(
                   provider.imageTabs,
@@ -121,7 +119,7 @@ class _MediaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => OpenFile.open(file.path),
+      onTap: () => OpenFilex.open(file.path),
       child: GridTile(
         header: Container(
           height: 50,

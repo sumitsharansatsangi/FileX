@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:cherry_toast/cherry_toast.dart';
 import 'package:filex/utils/utils.dart';
 import 'package:filex/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Dialogs {
   static showExitDialog(BuildContext context) {
@@ -44,7 +44,7 @@ class Dialogs {
                       child: Text(
                         'No',
                         style: TextStyle(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                       onPressed: () => Navigator.pop(context),
@@ -57,7 +57,8 @@ class Dialogs {
                           ),
                         ),
                         side: MaterialStateProperty.all(
-                          BorderSide(color: Theme.of(context).accentColor),
+                          BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
                     ),
@@ -73,7 +74,7 @@ class Dialogs {
                       onPressed: () => exit(0),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
-                            Theme.of(context).accentColor),
+                            Theme.of(context).colorScheme.secondary),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -93,10 +94,8 @@ class Dialogs {
   }
 
   static showToast(value) {
-    Fluttertoast.showToast(
-      msg: value,
-      toastLength: Toast.LENGTH_SHORT,
-      timeInSecForIosWeb: 1,
+    CherryToast.info(
+      title: value,
     );
   }
 }

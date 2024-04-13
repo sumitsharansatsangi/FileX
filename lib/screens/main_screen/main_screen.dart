@@ -35,8 +35,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Theme.of(context).primaryColor,
-          selectedItemColor: Theme.of(context).accentColor,
-          unselectedItemColor: Theme.of(context).textTheme.headline1!.color,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
+          unselectedItemColor: Theme.of(context).textTheme.displayLarge!.color,
           elevation: 4.0,
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
@@ -70,14 +70,15 @@ class _MainScreenState extends State<MainScreen> {
     _pageController = PageController(initialPage: 0);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Provider.of<CoreProvider>(context, listen: false).checkSpace();
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+          overlays: SystemUiOverlay.values);
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Theme.of(context).primaryColor,
         systemNavigationBarColor: Colors.black,
-        statusBarIconBrightness:
-            Theme.of(context).primaryColor == ThemeConfig.darkTheme.primaryColor
-                ? Brightness.light
-                : Brightness.dark,
+        // statusBarIconBrightness:
+        //     Theme.of(context).primaryColor == ThemeConfig.darkTheme.primaryColor
+        //         ? Brightness.light
+        //         : Brightness.dark,
       ));
     });
   }

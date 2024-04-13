@@ -42,7 +42,7 @@ class AddFileDialog extends StatelessWidget {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -55,7 +55,8 @@ class AddFileDialog extends StatelessWidget {
                         ),
                       ),
                       side: MaterialStateProperty.all(
-                        BorderSide(color: Theme.of(context).accentColor),
+                        BorderSide(
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                     ),
                   ),
@@ -79,6 +80,7 @@ class AddFileDialog extends StatelessWidget {
                               Dialogs.showToast(
                                   'Cannot write to this Storage  device!');
                             }
+                            return Directory("");
                           });
                         } else {
                           Dialogs.showToast(
@@ -89,7 +91,7 @@ class AddFileDialog extends StatelessWidget {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).accentColor),
+                          Theme.of(context).colorScheme.secondary),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),

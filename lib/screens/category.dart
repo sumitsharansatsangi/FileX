@@ -49,10 +49,10 @@ class _CategoryState extends State<Category> {
                   appBar: AppBar(
                     title: Text('${widget.title}'),
                     bottom: TabBar(
-                      indicatorColor: Theme.of(context).accentColor,
-                      labelColor: Theme.of(context).accentColor,
+                      indicatorColor: Theme.of(context).colorScheme.secondary,
+                      labelColor: Theme.of(context).colorScheme.secondary,
                       unselectedLabelColor:
-                          Theme.of(context).textTheme.caption!.color,
+                          Theme.of(context).textTheme.bodySmall!.color,
                       isScrollable:
                           provider.audioTabs.length < 3 ? false : true,
                       tabs: Constants.map<Widget>(

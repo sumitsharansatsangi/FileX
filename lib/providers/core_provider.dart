@@ -75,7 +75,7 @@ class CoreProvider extends ChangeNotifier {
     });
   }
 
-  static getFilesWithIsolate(Map<String, dynamic> context) async {
+  static Future<void> getFilesWithIsolate(Map<String, dynamic> context) async {
     print(context);
     String isolateName = context['name'];
     List<FileSystemEntity> l =

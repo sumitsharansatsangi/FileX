@@ -22,13 +22,13 @@ class Search extends SearchDelegate {
     return theme.copyWith(
       primaryTextTheme: theme.primaryTextTheme,
       textTheme: theme.textTheme.copyWith(
-        headline1: theme.textTheme.headline1!.copyWith(
-          color: theme.primaryTextTheme.headline6!.color,
+        displayLarge: theme.textTheme.displayLarge!.copyWith(
+          color: theme.primaryTextTheme.titleLarge!.color,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(
-          color: theme.primaryTextTheme.headline6!.color,
+          color: theme.primaryTextTheme.titleLarge!.color,
         ),
       ),
     );

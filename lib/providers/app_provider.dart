@@ -1,5 +1,3 @@
-import 'package:filex/utils/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +7,7 @@ class AppProvider extends ChangeNotifier {
     checkTheme();
   }
 
-  ThemeData theme = ThemeConfig.lightTheme;
+  // ThemeData theme = ThemeConfig.lightTheme;
   Key key = UniqueKey();
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -23,14 +21,14 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTheme(value, c) {
-    theme = value;
+  void setTheme(value, c, context) {
+    // theme = value;
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString('theme', c).then((val) {
-        SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+            overlays: SystemUiOverlay.values);
         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor:
-              c == 'dark' ? ThemeConfig.darkPrimary : ThemeConfig.lightPrimary,
+          statusBarColor: Theme.of(context).colorScheme.primary,
           statusBarIconBrightness:
               c == 'dark' ? Brightness.light : Brightness.dark,
         ));
@@ -40,22 +38,22 @@ class AppProvider extends ChangeNotifier {
   }
 
   ThemeData getTheme(value) {
-    return theme;
+    return ThemeData.dark();
   }
 
   Future<ThemeData> checkTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    ThemeData t;
+    ThemeData t = ThemeData.dark();
     String? r =
         prefs.getString('theme') == null ? 'light' : prefs.getString('theme');
 
-    if (r == 'light') {
-      t = ThemeConfig.lightTheme;
-      setTheme(ThemeConfig.lightTheme, 'light');
-    } else {
-      t = ThemeConfig.darkTheme;
-      setTheme(ThemeConfig.darkTheme, 'dark');
-    }
+    // if (r == 'light') {
+    //   t = ThemeConfig.lightTheme;
+    //   setTheme(ThemeConfig.lightTheme, 'light', context);
+    // } else {
+    //   t = ThemeConfig.darkTheme;
+    //   setTheme(ThemeConfig.darkTheme, 'dark', context);
+    // }
 
     return t;
   }

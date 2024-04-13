@@ -29,8 +29,8 @@ class AppScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 Application app = data[index];
                 return ListTile(
-                  leading: app is ApplicationWithIcon
-                      ? Image.memory(app.icon, height: 40, width: 40)
+                  leading: app.icon != null
+                      ? Image.memory(app.icon!, height: 40, width: 40)
                       : null,
                   title: Text(app.appName),
                   subtitle: Text('${app.packageName}'),

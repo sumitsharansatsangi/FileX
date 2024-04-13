@@ -5,7 +5,7 @@ import 'package:filex/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 
 // ignore: must_be_immutable
@@ -70,7 +70,7 @@ class _WhatsAppItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => OpenFile.open(file.path),
+      onTap: () => OpenFilex.open(file.path),
       child: GridTile(
         header: Container(
           height: 50.0,
