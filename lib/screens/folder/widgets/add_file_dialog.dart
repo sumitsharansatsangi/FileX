@@ -75,7 +75,7 @@ class AddFileDialog extends StatelessWidget {
                           await Directory(path + '/${name.text}')
                               .create()
                               .catchError((e) {
-                            print(e.toString());
+                            debugPrint(e.toString());
                             if (e.toString().contains('Permission denied')) {
                               Dialogs.showToast(
                                   'Cannot write to this Storage  device!');

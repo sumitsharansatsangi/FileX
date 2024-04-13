@@ -44,9 +44,11 @@ dependencies:
     git: https://github.com/kumsumit/share_plus.git
   video_player:
     git: https://github.com/kumsumit/video_player.git  
-  isolate_handler: ^1.0.0
-dependency_overrides:
+  isolate_handler:
+    git: https://github.com/sumitsharansatsangi/isolate_handler.git
+# dependency_overrides:
   platform: ^3.1.4
+  file: ^7.0.0
 
 dev_dependencies:
   flutter_test:

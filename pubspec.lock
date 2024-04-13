@@ -125,13 +125,13 @@ packages:
     source: hosted
     version: "2.1.2"
   file:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file
-      sha256: "1b92bec4fc2a72f59a8e15af5f52cd441e4a7860b49499d69dfa817af20e925d"
+      sha256: "5fc22d7c25582e38ad9a8515372cd9a93834027aacf1801cf01164dac0ffa08c"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.4"
+    version: "7.0.0"
   fixnum:
     dependency: transitive
     description:
@@ -157,10 +157,11 @@ packages:
   flutter_isolate:
     dependency: transitive
     description:
-      name: flutter_isolate
-      sha256: "8ab879634322a012feb096153cf759caa118d81300189d1730455f3718bca24b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "2926d10e8eb2d65a962755389643b7ca7d9b1146"
+      url: "https://github.com/sumitsharansatsangi/flutter_isolate.git"
+    source: git
     version: "2.0.5-pre"
   flutter_test:
     dependency: "direct dev"
@@ -191,10 +192,11 @@ packages:
   isolate_handler:
     dependency: "direct main"
     description:
-      name: isolate_handler
-      sha256: "7d90f2694551b4b18cbb3b635ad650a73b522854e9232f4b1227bb64914f1fde"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: ef4bce411582b4a2de264082c124217f1f9b60df
+      url: "https://github.com/sumitsharansatsangi/isolate_handler.git"
+    source: git
     version: "1.0.2"
   leak_tracker:
     dependency: transitive
@@ -392,7 +394,7 @@ packages:
     source: git
     version: "0.1.3"
   platform:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: platform
       sha256: "12220bb4b65720483f8fa9450b4332347737cf8213dd2840d8b2c823e47243ec"
@@ -439,64 +441,64 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6b65c215ac684845c7d7eb2f211d823cbca4cb48"
+      resolved-ref: "40d552944762681e54b586cc4def0d82ebac1917"
       url: "https://github.com/kumsumit/shared_preferences.git"
     source: git
-    version: "2.2.1"
+    version: "2.2.3"
   shared_preferences_android:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "61bc4cda11e2a0fb18eb1a4bad9e54ce4c3d01a1"
+      resolved-ref: "4ac56f0197c592d00d16dc170deb19d3863f6bc3"
       url: "https://github.com/kumsumit/shared_preferences_android.git"
     source: git
-    version: "2.2.1"
+    version: "2.2.2"
   shared_preferences_foundation:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ac066e086088c1659573eb22ef2deb93d8c4a6fe
+      resolved-ref: "4b046ef69023dfb42cf94f5f550190ed74ea8878"
       url: "https://github.com/kumsumit/shared_preferences_foundation.git"
     source: git
-    version: "2.3.4"
+    version: "2.3.5"
   shared_preferences_linux:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8943cf97297414a15c84280e6f5f463a2d74af3f"
+      resolved-ref: "54d3d78d25c84e945aa56baaa4d86a36270fcd81"
       url: "https://github.com/kumsumit/shared_preferences_linux.git"
     source: git
-    version: "2.3.1"
+    version: "2.3.2"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "97103c3284bb833da15de62bc6fac5d0cb6ad959"
+      resolved-ref: "922868097bdbcfc2c4606d0d6515c4f407323c1e"
       url: "https://github.com/kumsumit/shared_preferences_platform_interface.git"
     source: git
-    version: "2.3.1"
+    version: "2.3.2"
   shared_preferences_web:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6be1774859ea7456e98aec8994165a29cdb55d50"
+      resolved-ref: "0fe08900348b9e376fa10ec9e4a0fd0eb70f1ade"
       url: "https://github.com/kumsumit/shared_preferences_web.git"
     source: git
-    version: "2.2.1"
+    version: "2.3.0"
   shared_preferences_windows:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "5e03cf68ace8ffcfb963fa1c4c003fd7bfdd129d"
+      resolved-ref: "8ebd6a6af079f27729d211f80ed5577b344e1b1e"
       url: "https://github.com/kumsumit/shared_preferences_windows.git"
     source: git
-    version: "2.3.1"
+    version: "2.3.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -706,4 +708,4 @@ packages:
     version: "1.0.3"
 sdks:
   dart: ">=3.3.3 <4.0.0"
-  flutter: ">=3.19.3"
+  flutter: ">=3.19.5"

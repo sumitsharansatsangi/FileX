@@ -58,7 +58,7 @@ class _CategoryState extends State<Category> {
                       tabs: Constants.map<Widget>(
                         provider.audioTabs,
                         (index, label) {
-                          print('tabs');
+                          debugPrint('tabs');
                           return Tab(text: '$label');
                         },
                       ),
@@ -70,7 +70,7 @@ class _CategoryState extends State<Category> {
                           children: Constants.map<Widget>(
                             provider.audioTabs,
                             (index, label) {
-                              print(label);
+                              debugPrint(label);
                               List list = [];
                               List items = provider.audio;
                               items.forEach((file) {
@@ -79,7 +79,7 @@ class _CategoryState extends State<Category> {
                                   list.add(file);
                                 }
                               });
-                              // print(label);
+                              // debugPrint(label);
                               return ListView.separated(
                                 padding: EdgeInsets.only(left: 20),
                                 itemCount: index == 0

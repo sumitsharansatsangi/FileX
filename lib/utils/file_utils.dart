@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:filex/utils/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
@@ -60,7 +61,7 @@ class FileUtils {
             await getAllFilesInPath(dir.path, showHidden: showHidden);
       } catch (e) {
         allFilesInPath = [];
-        print(e);
+        debugPrint(e.toString());
       }
       files.addAll(allFilesInPath);
     }
@@ -108,7 +109,7 @@ class FileUtils {
         }
       } else {
         if (!file.path.contains('/storage/emulated/0/Android')) {
-//          print(file.path);
+//          debugPrint(file.path);
           if (!showHidden) {
             if (!file.isHidden) {
               files.addAll(
@@ -121,7 +122,7 @@ class FileUtils {
         }
       }
     }
-//    print(files);
+//    debugPrint(files);
     return files;
   }
 

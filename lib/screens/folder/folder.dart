@@ -136,7 +136,7 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
                 ? Feather.smartphone
                 : Icons.sd_card,
             onChanged: (index) {
-              print(paths[index]);
+              debugPrint(paths[index]);
               path = paths[index];
               paths.removeRange(index + 1, paths.length);
               setState(() {});
@@ -192,7 +192,7 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
                     deleteFile(false, file);
                   } else if (v == 2) {
                     /// TODO: Implement Share file feature
-                    print('Share');
+                    debugPrint('Share');
                   }
                 },
               );
@@ -220,7 +220,7 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
       }
       Dialogs.showToast('Delete Successful');
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       if (e.toString().contains('Permission denied')) {
         Dialogs.showToast('Cannot write to this Storage device!');
       }

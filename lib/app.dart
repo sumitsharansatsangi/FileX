@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     final lightColorScheme = ColorScheme.fromSeed(
         seedColor: const Color.fromRGBO(178, 216, 216, 100));
     final darkColorSchme =
-        ColorScheme.fromSeed(seedColor: const Color.fromRGBO(0, 0, 76, 100));
+        ColorScheme.fromSeed(seedColor: const Color.fromRGBO(0, 76, 76, 100));
 
     final ThemeData lightTheme = ThemeData(
       useMaterial3: true,

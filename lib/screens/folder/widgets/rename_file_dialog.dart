@@ -97,7 +97,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                                         pathlib.basename(widget.path), '') +
                                     '${name.text}')
                                 .catchError((e) {
-                              print(e.toString());
+                              debugPrint(e.toString());
                               if (e.toString().contains('Permission denied')) {
                                 Dialogs.showToast(
                                     'Cannot write to this device!');
@@ -121,7 +121,7 @@ class _RenameFileDialogState extends State<RenameFileDialog> {
                                         pathlib.basename(widget.path), '') +
                                     '${name.text}')
                                 .catchError((e) {
-                              print(e.toString());
+                              debugPrint(e.toString());
                               if (e.toString().contains('Permission denied')) {
                                 Dialogs.showToast(
                                     'Cannot write to this device!');
