@@ -8,7 +8,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 
 class FileItem extends StatelessWidget {
-  final FileSystemEntity file;
+  final String file;
   final Function? popTap;
 
   FileItem({
@@ -20,20 +20,21 @@ class FileItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => OpenFilex.open(file.path),
+      onTap: () => OpenFilex.open(file),
       contentPadding: EdgeInsets.all(0),
       leading: FileIcon(file: file),
       title: Text(
-        '${basename(file.path)}',
-        style: TextStyle(fontSize: 14),
+        '${basename(file)}',
+        style: TextStyle(fontSize: 14,color: Theme.of(context).textTheme.titleSmall!.color),
         maxLines: 2,
       ),
       subtitle: Text(
-        '${FileUtils.formatBytes(File(file.path).lengthSync(), 2)},'
-        ' ${FileUtils.formatTime(File(file.path).lastModifiedSync().toIso8601String())}',
+        '${FileUtils.formatBytes(File(file).lengthSync(), 2)},'
+        ' ${FileUtils.formatTime(File(file).lastModifiedSync().toIso8601String())}',
+        style: TextStyle(color:Theme.of(context).textTheme.titleSmall!.color!.withOpacity(0.6)),
       ),
       trailing:
-          popTap == null ? null : FilePopup(path: file.path, popTap: popTap!),
+          popTap == null ? null : FilePopup(path: file, popTap: popTap!),
     );
   }
 }

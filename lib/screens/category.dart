@@ -90,7 +90,7 @@ class _CategoryState extends State<Category> {
                                   FileSystemEntity file = index == 0
                                       ? provider.audio[index2]
                                       : list[index2];
-                                  return FileItem(file: file);
+                                  return FileItem(file: file.path);
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {

@@ -38,10 +38,10 @@ class _DownloadsState extends State<Downloads> {
             appBar: AppBar(
               title: Text('${widget.title}'),
               bottom: TabBar(
-                indicatorColor: Theme.of(context).colorScheme.secondary,
-                labelColor: Theme.of(context).colorScheme.secondary,
+                indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+                labelColor: Theme.of(context).colorScheme.primaryContainer,
                 unselectedLabelColor:
-                    Theme.of(context).textTheme.bodySmall!.color,
+                    Theme.of(context).textTheme.titleSmall!.color,
                 isScrollable: false,
                 tabs: Constants.map<Widget>(
                   provider.downloadTabs,

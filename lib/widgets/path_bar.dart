@@ -39,7 +39,7 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
             }
             return InkWell(
               onTap: () => onChanged(index),
-              child: Container(
+              child: SizedBox(
                 height: 40,
                 child: Center(
                   child: Padding(

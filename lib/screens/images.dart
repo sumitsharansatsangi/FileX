@@ -164,7 +164,7 @@ class _MediaTile extends StatelessWidget {
           ),
         ),
         child: mimeType.split('/')[0] == 'video'
-            ? FileIcon(file: file)
+            ? FileIcon(file: file.path)
             : Image(
                 fit: BoxFit.cover,
                 errorBuilder: (b, o, c) {

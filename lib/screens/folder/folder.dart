@@ -184,7 +184,7 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
                 );
               }
               return FileItem(
-                file: file,
+                file: file.path,
                 popTap: (v) async {
                   if (v == 0) {
                     renameDialog(context, file.path, 'file');

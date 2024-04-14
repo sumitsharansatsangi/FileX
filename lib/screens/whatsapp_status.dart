@@ -8,16 +8,16 @@ import 'package:mime_type/mime_type.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
 
-// ignore: must_be_immutable
 class WhatsappStatus extends StatelessWidget {
   final String title;
-
+  final String path;
+  final List<FileSystemEntity> files;
   WhatsappStatus({
     Key? key,
     required this.title,
-  }) : super(key: key);
-  List<FileSystemEntity> files = Directory(FileUtils.waPath).listSync()
-    ..removeWhere((f) => f.isHidden);
+    required this.path
+  }) :  files = Directory(path).listSync()
+    ..removeWhere((f) => f.isHidden),super(key: key);
 
   @override
   Widget build(BuildContext context) {

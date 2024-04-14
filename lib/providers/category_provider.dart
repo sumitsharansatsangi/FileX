@@ -16,15 +16,15 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   bool loading = false;
-  List<FileSystemEntity> downloads = <FileSystemEntity>[];
+  List<String> downloads = <String>[];
   List<String> downloadTabs = <String>[];
 
-  List<FileSystemEntity> images = <FileSystemEntity>[];
+  List<String> images = <String>[];
   List<String> imageTabs = <String>[];
 
-  List<FileSystemEntity> audio = <FileSystemEntity>[];
+  List<String> audio = <String>[];
   List<String> audioTabs = <String>[];
-  List<FileSystemEntity> currentFiles = [];
+  List<String> currentFiles = [];
 
   bool showHidden = false;
   int sort = 0;
@@ -43,7 +43,7 @@ class CategoryProvider extends ChangeNotifier {
         debugPrint(files.toString());
         files.forEach((file) {
           if (FileSystemEntity.isFileSync(file.path)) {
-            downloads.add(file);
+            downloads.add(file.path);
             downloadTabs
                 .add(file.path.split('/')[file.path.split('/').length - 2]);
             downloadTabs = downloadTabs.toSet().toList();
@@ -75,10 +75,10 @@ class CategoryProvider extends ChangeNotifier {
     _port.listen((files) {
       debugPrint('RECEIVED SERVER PORT');
       debugPrint(files);
-      files.forEach((file) {
+      files.forEach((File file) {
         String mimeType = mime(file.path) ?? '';
         if (mimeType.split('/')[0] == type) {
-          images.add(file);
+          images.add(file.path);
           imageTabs
               .add('${file.path.split('/')[file.path.split('/').length - 2]}');
           imageTabs = imageTabs.toSet().toList();
@@ -141,7 +141,7 @@ class CategoryProvider extends ChangeNotifier {
 
   switchCurrentFiles(List list, String label) async {
     List<FileSystemEntity> l = await compute(getTabImages, [list, label]);
-    currentFiles = l;
+    currentFiles = l.map((e) => e.path).toList();
     notifyListeners();
   }
 
@@ -151,7 +151,7 @@ class CategoryProvider extends ChangeNotifier {
     List<FileSystemEntity> files = [];
     items.forEach((file) {
       if ('${file.path.split('/')[file.path.split('/').length - 2]}' == label) {
-        files.add(file);
+        files.add(file.path);
       }
     });
     return files;

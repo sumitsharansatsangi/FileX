@@ -84,7 +84,7 @@ class Search extends SearchDelegate {
                     },
                   );
                 }
-                return FileItem(file: file, popTap: null);
+                return FileItem(file: file.path, popTap: null);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return Stack(
@@ -136,7 +136,7 @@ class Search extends SearchDelegate {
                     },
                   );
                 }
-                return FileItem(file: file, popTap: null);
+                return FileItem(file: file.path, popTap: null);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return Stack(

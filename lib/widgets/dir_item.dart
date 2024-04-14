@@ -22,7 +22,7 @@ class DirectoryItem extends StatelessWidget {
     return ListTile(
       onTap: () => tap(),
       contentPadding: EdgeInsets.all(0),
-      leading: Container(
+      leading: SizedBox(
         height: 40,
         width: 40,
         child: Center(
@@ -34,7 +34,7 @@ class DirectoryItem extends StatelessWidget {
       title: Text(
         '${basename(file.path)}',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 14,color: Theme.of(context).textTheme.titleSmall!.color
         ),
         maxLines: 2,
       ),

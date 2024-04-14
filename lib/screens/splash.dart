@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:filex/screens/main_screen/main_screen.dart';
 import 'package:filex/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 
 class Splash extends StatefulWidget {
   @override
@@ -40,6 +40,8 @@ class _SplashState extends State<Splash> {
     }
   }
 
+  
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +59,7 @@ class _SplashState extends State<Splash> {
         //         : Brightness.dark,
       ));
     });
+     
   }
 
   @override

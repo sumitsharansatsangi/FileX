@@ -74,6 +74,7 @@ class _SectionTitle extends StatelessWidget {
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 12.0,
+        color: Theme.of(context).textTheme.titleSmall!.color
       ),
     );
   }
@@ -109,7 +110,7 @@ class _StorageSection extends StatelessWidget {
               path: path,
               title: index == 0 ? 'Device' : 'SD Card',
               icon: index == 0 ? Feather.smartphone : Icons.sd_storage,
-              color: index == 0 ? Colors.lightBlue : Colors.orange,
+              color: index == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).cardColor,
               usedSpace: index == 0
                   ? coreProvider.usedSpace
                   : coreProvider.usedSDSpace,
@@ -146,12 +147,18 @@ class _CategoriesSection extends StatelessWidget {
           onTap: () {
             if (index == Constants.categories.length - 1) {
               // Check if the user has whatsapp installed
-              if (Directory(FileUtils.waPath).existsSync()) {
+              if (Directory(FileUtils.waPath1).existsSync()) {
                 Navigate.pushPage(
                   context,
-                  WhatsappStatus(title: '${category['title']}'),
+                  WhatsappStatus(title: category['title'], path: FileUtils.waPath1),
                 );
-              } else {
+              } else if(Directory(FileUtils.waPath2).existsSync()){
+                  Navigate.pushPage(
+                  context,
+                  WhatsappStatus(title: category['title'], path: FileUtils.waPath2),
+                );
+              }
+               else {
                 Dialogs.showToast(
                     'Please Install WhatsApp to use this feature');
               }
@@ -176,13 +183,13 @@ class _CategoriesSection extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Theme.of(context).dividerColor,
+                color: Theme.of(context).colorScheme.primaryContainer,
                 width: 2,
               ),
             ),
             child: Icon(category['icon'], size: 18, color: category['color']),
           ),
-          title: Text('${category['title']}'),
+          title: Text('${category['title']}',style: TextStyle(color:Theme.of(context).textTheme.titleLarge!.color),),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -198,7 +205,7 @@ class _RecentFiles extends StatelessWidget {
     return Consumer<CoreProvider>(
       builder: (BuildContext context, coreProvider, Widget? child) {
         if (coreProvider.recentLoading) {
-          return Container(height: 150, child: CustomLoader());
+          return SizedBox(height: 150, child: CustomLoader());
         }
         return ListView.separated(
           padding: EdgeInsets.only(right: 20),
@@ -208,8 +215,8 @@ class _RecentFiles extends StatelessWidget {
               ? 5
               : coreProvider.recentFiles.length,
           itemBuilder: (BuildContext context, int index) {
-            FileSystemEntity file = coreProvider.recentFiles[index];
-            return file.existsSync() ? FileItem(file: file) : SizedBox();
+            String file = coreProvider.recentFiles[index];
+            return File(file).existsSync() ? FileItem(file: file) : SizedBox();
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(

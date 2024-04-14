@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:filex/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:isolate_handler/isolate_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CoreProvider extends ChangeNotifier {
   List<FileSystemEntity> availableStorage = <FileSystemEntity>[];
-  List<FileSystemEntity> recentFiles = <FileSystemEntity>[];
+  List<String> recentFiles = <String>[];
+  final isolates = IsolateHandler();
   int totalSpace = 0;
   int freeSpace = 0;
   int totalSDSpace = 0;
@@ -18,17 +21,7 @@ class CoreProvider extends ChangeNotifier {
   bool storageLoading = true;
   bool recentLoading = true;
 
-  checkSpace() async{
-    final rp = ReceivePort();
-    Isolate.spawn(getRecentFiles,rp.sendPort); 
-    rp.listen((message) {debugPrint('RECEIVED SERVER PORT');
-      debugPrint(message);
-      recentFiles.addAll(message);
-      setRecentLoading(false);
-      rp.close();});
-  }
-
-  void getRecentFiles(SendPort sp) async{
+  checkSpace() async {
     setRecentLoading(true);
     setStorageLoading(true);
     recentFiles.clear();
@@ -50,11 +43,53 @@ class CoreProvider extends ChangeNotifier {
       setUsedSDSpace(totalSD - freeSD);
     }
     setStorageLoading(false);
-      List<FileSystemEntity> l =
-        await FileUtils.getRecentFiles(showHidden: false);
-      sp.send(l);  
+    getRecentFiles();
   }
 
+  /// I had to use a combination of [isolate_handler] plugin and
+  /// [IsolateNameServer] because compute doesnt work as my function uses
+  /// an external plugin and also [isolate_handler] plugin doesnt allow me
+  /// to pass complex data (in this case List<FileSystemEntity>). so basically
+  /// i used the [isolate_handler] to do get the file and use [IsolateNameServer]
+  /// to send it back to the main Thread
+  getRecentFiles() async {
+    String isolateName = 'recent';
+    isolates.spawn<String>(
+      getFilesWithIsolate,
+      name: isolateName,
+      onReceive: (val) {
+        debugPrint(val);
+        isolates.kill(isolateName);
+      },
+      onInitialized: () => isolates.send('hey', to: isolateName),
+    );
+    ReceivePort _port = ReceivePort();
+    IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
+    _port.listen((message) {
+      debugPrint('RECEIVED SERVER PORT');
+      recentFiles.addAll(message);
+      setRecentLoading(false);
+      _port.close();
+      IsolateNameServer.removePortNameMapping('${isolateName}_2');
+    });
+  }
+
+  static getFilesWithIsolate(Map<String, dynamic> context) async {
+    debugPrint(context.toString());
+    String isolateName = context['name'];
+    List<FileSystemEntity> l =
+        await FileUtils.getRecentFiles(showHidden: false);
+    final messenger = HandledIsolate.initialize(context);
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('${isolateName}_2');
+    List<String> validFile=[];
+    for( final f in l ){
+      validFile.add(f.path);
+    }    
+    // debugPrint(l.toString());    
+    send?.send(validFile);
+    messenger.send('done');
+  }
 
   void setFreeSpace(value) {
     freeSpace = value;

@@ -13,18 +13,19 @@ class DirPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
+      surfaceTintColor: Theme.of(context).colorScheme.secondaryContainer,
       onSelected: (val) => popTap!(val),
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 0,
           child: Text(
-            'Rename',
+            'Rename', style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
           ),
         ),
         PopupMenuItem(
           value: 1,
           child: Text(
-            'Delete',
+            'Delete', style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
           ),
         ),
       ],

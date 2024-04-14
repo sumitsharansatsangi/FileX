@@ -1,63 +1,92 @@
 import 'dart:io';
-
-import 'package:filex/providers/providers.dart';
 import 'package:filex/screens/ios_error.dart';
 import 'package:filex/screens/splash.dart';
 import 'package:filex/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/theme_provider.dart';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final lightColorScheme = ColorScheme.fromSeed(
+    final colorScheme = ColorScheme.fromSeed(
         seedColor: const Color.fromRGBO(178, 216, 216, 100));
-    final darkColorSchme =
-        ColorScheme.fromSeed(seedColor: const Color.fromRGBO(0, 76, 76, 100));
 
     final ThemeData lightTheme = ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: lightColorScheme,
-      scaffoldBackgroundColor: lightColorScheme.background,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+        foregroundColor: colorScheme.primary,
+      )),
+       textTheme: TextTheme(
+          titleLarge: TextStyle(color: colorScheme.primary),
+          titleMedium: TextStyle(color: colorScheme.primary),
+          titleSmall: TextStyle(color: colorScheme.primary)),
+      iconTheme: IconThemeData(color: colorScheme.primary),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.secondaryContainer,
+        indicatorColor: colorScheme.onSecondary.withOpacity(0.5),
+        iconTheme:
+            MaterialStatePropertyAll(IconThemeData(color: colorScheme.primary)),
+        labelTextStyle:
+            MaterialStatePropertyAll(TextStyle(color: colorScheme.primary)),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 0,
-        color: lightColorScheme.primary,
+        color: colorScheme.secondaryContainer,
         titleTextStyle: TextStyle(
-          color: Colors.black,
+          color: colorScheme.secondary,
           fontSize: 20,
           fontWeight: FontWeight.w800,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
         ),
       ),
     );
 
     final ThemeData darkTheme = ThemeData(
-      brightness: Brightness.dark,
       useMaterial3: true,
-      scaffoldBackgroundColor: darkColorSchme.background,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.onSurface,
+      iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(
+        foregroundColor: colorScheme.primaryContainer,
+      )),
+      textTheme: TextTheme(
+          titleLarge: TextStyle(color: colorScheme.secondaryContainer),
+          titleMedium: TextStyle(color: colorScheme.secondaryContainer),
+          titleSmall: TextStyle(color: colorScheme.secondaryContainer)),
+      iconTheme: IconThemeData(color: colorScheme.primaryContainer),
+      listTileTheme: ListTileThemeData(iconColor: colorScheme.surfaceVariant),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.secondary,
+        indicatorColor: colorScheme.onSecondary.withOpacity(0.3),
+        iconTheme: MaterialStatePropertyAll(
+            IconThemeData(color: colorScheme.onInverseSurface)),
+        labelTextStyle: MaterialStatePropertyAll(
+            TextStyle(color: colorScheme.onInverseSurface)),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 0,
-        color: darkColorSchme.primary,
+        color: colorScheme.secondary,
         titleTextStyle: TextStyle(
-          color: Colors.white,
+          color: colorScheme.onPrimary,
           fontSize: 20,
           fontWeight: FontWeight.w800,
         ),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
       ),
     );
-    return Consumer<AppProvider>(
-      builder: (BuildContext context, appProvider, Widget? child) {
+    return Consumer<ThemeProvider>(
+      builder: (BuildContext context, themeProvider, Widget? child) {
         return MaterialApp(
-          key: appProvider.key,
           debugShowCheckedModeBanner: false,
-          navigatorKey: appProvider.navigatorKey,
           title: AppStrings.appName,
+          themeMode: themeProvider.darkTheme == null
+              ? ThemeMode.system
+              : themeProvider.darkTheme!
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
           theme: lightTheme,
           darkTheme: darkTheme,
           home: Platform.isIOS ? IosError() : Splash(),

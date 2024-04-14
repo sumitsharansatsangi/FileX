@@ -48,6 +48,8 @@ class _SettingsState extends State<Settings> {
             ),
             title: Text(
               'See hidden files',
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.titleSmall!.color),
             ),
             value: Provider.of<CategoryProvider>(context).showHidden,
             onChanged: (value) {
@@ -56,7 +58,43 @@ class _SettingsState extends State<Settings> {
             },
             activeColor: Theme.of(context).colorScheme.secondary,
           ),
-          Container(
+          Divider(
+            height: 1,
+            color: Theme.of(context).dividerColor,
+          ),
+          Consumer(builder: (context, ThemeProvider themeProvider, child) {
+            return Text(
+              themeProvider.darkTheme.toString(),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.titleSmall!.color),
+            );
+          }),
+          Consumer(
+            builder: (context, ThemeProvider themeProvider, child) =>
+                SwitchListTile.adaptive(
+              contentPadding: EdgeInsets.all(0),
+              secondary: Icon(Icons.light_mode),
+              title: Text(
+                "Dark Mode",
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.titleSmall!.color),
+              ),
+              onChanged: (val) {
+                if (themeProvider.darkTheme == null) {
+                  if (Theme.of(context).brightness == Brightness.dark) {
+                    themeProvider.darkTheme = true;
+                  } else {
+                    themeProvider.darkTheme = false;
+                  }
+                }
+                themeProvider.toggleTheme();
+              },
+              value: themeProvider.darkTheme ??
+                  Theme.of(context).brightness == Brightness.dark,
+              activeColor: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+          Divider(
             height: 1,
             color: Theme.of(context).dividerColor,
           ),
@@ -95,9 +133,13 @@ class _SettingsState extends State<Settings> {
             contentPadding: EdgeInsets.all(0),
             onTap: () => showLicensePage(context: context),
             leading: Icon(Feather.file_text),
-            title: Text('Open source licences'),
+            title: Text(
+              'Open source licences',
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.titleSmall!.color),
+            ),
           ),
-          Container(
+          Divider(
             height: 1,
             color: Theme.of(context).dividerColor,
           ),
@@ -105,9 +147,13 @@ class _SettingsState extends State<Settings> {
             contentPadding: EdgeInsets.all(0),
             onTap: () => Navigate.pushPage(context, About()),
             leading: Icon(Feather.info),
-            title: Text('About'),
+            title: Text(
+              'About',
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.titleSmall!.color),
+            ),
           ),
-          Container(
+          Divider(
             height: 1,
             color: Theme.of(context).dividerColor,
           ),

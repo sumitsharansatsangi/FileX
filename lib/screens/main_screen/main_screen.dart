@@ -1,7 +1,7 @@
 import 'package:filex/providers/providers.dart';
 import 'package:filex/screens/browse/browse.dart';
 import 'package:filex/screens/settings.dart';
-import 'package:filex/screens/share.dart';
+// import 'package:filex/screens/share.dart';
 import 'package:filex/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -29,32 +29,28 @@ class _MainScreenState extends State<MainScreen> {
           onPageChanged: onPageChanged,
           children: <Widget>[
             Browse(),
-            Share(),
+            // Share(),
             Settings(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          selectedItemColor: Theme.of(context).colorScheme.secondary,
-          unselectedItemColor: Theme.of(context).textTheme.displayLarge!.color,
+        bottomNavigationBar: NavigationBar(
           elevation: 4.0,
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+          destinations: [
+            NavigationDestination(
               icon: Icon(Feather.folder),
               label: 'Browse',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Feather.share_2),
-              label: 'FTP',
-            ),
-            BottomNavigationBarItem(
+            // NavigationDestination(
+            //   icon: Icon(Feather.share_2),
+            //   label: 'FTP',
+            // ),
+            NavigationDestination(
               icon: Icon(Feather.settings),
               label: 'Settings',
             ),
           ],
-          onTap: navigationTapped,
-          currentIndex: _page,
+          onDestinationSelected: navigationTapped,
+          selectedIndex: _page,
         ),
       ),
     );

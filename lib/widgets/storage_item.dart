@@ -38,7 +38,7 @@ class StorageItem extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Theme.of(context).dividerColor,
+            color: Theme.of(context).colorScheme.primaryContainer,
             width: 2,
           ),
         ),
@@ -49,14 +49,14 @@ class StorageItem extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(title),
+          Text(title,style: Theme.of(context).textTheme.titleMedium,),
           Text(
             '${FileUtils.formatBytes(usedSpace, 2)} '
             'used of ${FileUtils.formatBytes(totalSpace, 2)}',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14.0,
-              color: Theme.of(context).textTheme.displayLarge!.color,
+              color: Theme.of(context).textTheme.titleMedium!.color,
             ),
           ),
         ],
@@ -67,7 +67,7 @@ class StorageItem extends StatelessWidget {
         ),
         child: LinearPercentIndicator(
           padding: EdgeInsets.all(0),
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           percent: percent,
           progressColor: color,
         ),
