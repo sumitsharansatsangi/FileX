@@ -36,6 +36,7 @@ class CategoryProvider extends ChangeNotifier {
     downloads.clear();
     downloadTabs.add('All');
     List<Directory> storages = await FileUtils.getStorageList();
+    
     storages.forEach((dir) {
       if (Directory(dir.path + 'Download').existsSync()) {
         List<FileSystemEntity> files =
@@ -75,16 +76,16 @@ class CategoryProvider extends ChangeNotifier {
     _port.listen((files) {
       debugPrint('RECEIVED SERVER PORT');
       debugPrint(files);
-      files.forEach((File file) {
-        String mimeType = mime(file.path) ?? '';
+      for (final file in files){
+         String mimeType = mime(file) ?? '';
         if (mimeType.split('/')[0] == type) {
-          images.add(file.path);
+          images.add(file);
           imageTabs
-              .add('${file.path.split('/')[file.path.split('/').length - 2]}');
+              .add('${file.split('/')[file.split('/').length - 2]}');
           imageTabs = imageTabs.toSet().toList();
         }
         notifyListeners();
-      });
+      }
       currentFiles = images;
       setLoading(false);
       _port.close();
@@ -103,7 +104,11 @@ class CategoryProvider extends ChangeNotifier {
     try {
       final SendPort? send =
           IsolateNameServer.lookupPortByName('${isolateName}_2');
-      send!.send(files);
+     List<String> validFile=[];
+    for( final f in files ){
+      validFile.add(f.path);
+    }         
+      send!.send(validFile);
     } catch (e) {
       debugPrint(e.toString());
     }

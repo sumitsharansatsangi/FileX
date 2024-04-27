@@ -85,8 +85,7 @@ class CoreProvider extends ChangeNotifier {
     List<String> validFile=[];
     for( final f in l ){
       validFile.add(f.path);
-    }    
-    // debugPrint(l.toString());    
+    }      
     send?.send(validFile);
     messenger.send('done');
   }
