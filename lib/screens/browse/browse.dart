@@ -72,10 +72,9 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       title.toUpperCase(),
       style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 12.0,
-        color: Theme.of(context).textTheme.titleSmall!.color
-      ),
+          fontWeight: FontWeight.bold,
+          fontSize: 12.0,
+          color: Theme.of(context).textTheme.titleSmall!.color),
     );
   }
 }
@@ -86,7 +85,7 @@ class _StorageSection extends StatelessWidget {
     return Consumer<CoreProvider>(
       builder: (BuildContext context, coreProvider, Widget? child) {
         if (coreProvider.storageLoading) {
-          return Container(height: 100, child: CustomLoader());
+          return SizedBox(height: 100, child: CustomLoader());
         }
         return ListView.separated(
           shrinkWrap: true,
@@ -94,10 +93,8 @@ class _StorageSection extends StatelessWidget {
           itemCount: coreProvider.availableStorage.length,
           itemBuilder: (BuildContext context, int index) {
             FileSystemEntity item = coreProvider.availableStorage[index];
-
             String path = item.path.split('Android')[0];
             double percent = 0;
-
             if (index == 0) {
               percent = calculatePercent(
                   coreProvider.usedSpace, coreProvider.totalSpace);
@@ -110,7 +107,9 @@ class _StorageSection extends StatelessWidget {
               path: path,
               title: index == 0 ? 'Device' : 'SD Card',
               icon: index == 0 ? Feather.smartphone : Icons.sd_storage,
-              color: index == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).cardColor,
+              color: index == 0
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).cardColor,
               usedSpace: index == 0
                   ? coreProvider.usedSpace
                   : coreProvider.usedSDSpace,
@@ -150,15 +149,16 @@ class _CategoriesSection extends StatelessWidget {
               if (Directory(FileUtils.waPath1).existsSync()) {
                 Navigate.pushPage(
                   context,
-                  WhatsappStatus(title: category['title'], path: FileUtils.waPath1),
+                  WhatsappStatus(
+                      title: category['title'], path: FileUtils.waPath1),
                 );
-              } else if(Directory(FileUtils.waPath2).existsSync()){
-                  Navigate.pushPage(
+              } else if (Directory(FileUtils.waPath2).existsSync()) {
+                Navigate.pushPage(
                   context,
-                  WhatsappStatus(title: category['title'], path: FileUtils.waPath2),
+                  WhatsappStatus(
+                      title: category['title'], path: FileUtils.waPath2),
                 );
-              }
-               else {
+              } else {
                 Dialogs.showToast(
                     'Please Install WhatsApp to use this feature');
               }
@@ -177,19 +177,25 @@ class _CategoriesSection extends StatelessWidget {
             }
           },
           contentPadding: EdgeInsets.all(0),
-          leading: Container(
+          leading: SizedBox(
             height: 40,
             width: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                width: 2,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  width: 2,
+                ),
               ),
+              child: Icon(category['icon'], size: 18, color: category['color']),
             ),
-            child: Icon(category['icon'], size: 18, color: category['color']),
           ),
-          title: Text('${category['title']}',style: TextStyle(color:Theme.of(context).textTheme.titleLarge!.color),),
+          title: Text(
+            '${category['title']}',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.titleLarge!.color),
+          ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {

@@ -34,39 +34,38 @@ class CustomAlert extends StatelessWidget {
             sigmaX: 0.5,
             sigmaY: 0.5,
           ),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      Center(
-                        child: Container(
-                          width: deviceWidth * 0.9,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                  bottomLeft: Radius.circular(10.0),
-                                  bottomRight: Radius.circular(10.0),
-                                ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    Center(
+                      child: SizedBox(
+                        width: deviceWidth * 0.9,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Card(
+                            color: Theme.of(context).colorScheme.tertiaryContainer,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                                bottomLeft: Radius.circular(10.0),
+                                bottomRight: Radius.circular(10.0),
                               ),
-                              child: child,
                             ),
+                            child: child,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

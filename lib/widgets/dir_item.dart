@@ -34,8 +34,7 @@ class DirectoryItem extends StatelessWidget {
       title: Text(
         '${basename(file.path)}',
         style: TextStyle(
-          fontSize: 14,color: Theme.of(context).textTheme.titleSmall!.color
-        ),
+            fontSize: 14, color: Theme.of(context).textTheme.titleSmall!.color),
         maxLines: 2,
       ),
       trailing: popTap == null

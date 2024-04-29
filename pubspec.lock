@@ -95,10 +95,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "97c7a8edd874491155eaad655dfe3e8fd698a5fe"
+      resolved-ref: "5928dc5b95da60ba7e22ef0af97a64a06e0a58d4"
       url: "https://github.com/kumsumit/device_info_plus.git"
     source: git
-    version: "10.0.1"
+    version: "10.1.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -423,19 +423,19 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ccb899e88464d359aa818867fdf48c2d4e743d96
+      resolved-ref: "54ba4c55dd15bb08796f6ba64240902010437561"
       url: "https://github.com/kumsumit/share_plus.git"
     source: git
-    version: "8.0.1"
+    version: "9.0.0"
   share_plus_platform_interface:
     dependency: transitive
     description:
       path: "."
       ref: HEAD
-      resolved-ref: c3fc6412fca4a75aafc68d21e9488f7720001332
+      resolved-ref: "54db7e7d1068f5c72cf69617ee523b955feee581"
       url: "https://github.com/kumsumit/share_plus_platform_interface.git"
     source: git
-    version: "3.3.1"
+    version: "4.0.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -707,5 +707,5 @@ packages:
     source: git
     version: "1.0.3"
 sdks:
-  dart: ">=3.3.3 <4.0.0"
+  dart: ">=3.3.4 <4.0.0"
   flutter: ">=3.19.5"

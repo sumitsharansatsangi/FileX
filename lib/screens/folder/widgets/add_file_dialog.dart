@@ -35,66 +35,67 @@ class AddFileDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                  height: 40,
-                  width: 130,
-                  child: OutlinedButton(
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                Expanded(
+                  child: Center(
+                    child: OutlinedButton(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      side: MaterialStateProperty.all(
-                        BorderSide(
-                            color: Theme.of(context).colorScheme.secondary),
+                      onPressed: () => Navigator.pop(context),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        side: MaterialStateProperty.all(
+                          BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  height: 40,
-                  width: 130,
-                  child: ElevatedButton(
-                    child: Text(
-                      'Create',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (name.text.isNotEmpty) {
-                        if (!Directory(path + '/${name.text}').existsSync()) {
-                          await Directory(path + '/${name.text}')
-                              .create()
-                              .catchError((e) {
-                            debugPrint(e.toString());
-                            if (e.toString().contains('Permission denied')) {
-                              Dialogs.showToast(
-                                  'Cannot write to this Storage  device!');
-                            }
-                            return Directory("");
-                          });
-                        } else {
-                          Dialogs.showToast(
-                              'A Folder with that name already exists!');
+                Expanded(
+                  
+                  child: Center(
+                    child: ElevatedButton(
+                      child: Text(
+                        'Create',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        if (name.text.isNotEmpty) {
+                          if (!Directory(path + '/${name.text}').existsSync()) {
+                            await Directory(path + '/${name.text}')
+                                .create()
+                                .catchError((e) {
+                              debugPrint(e.toString());
+                              if (e.toString().contains('Permission denied')) {
+                                Dialogs.showToast(
+                                    'Cannot write to this Storage  device!');
+                              }
+                              return Directory("");
+                            });
+                          } else {
+                            Dialogs.showToast(
+                                'A Folder with that name already exists!');
+                          }
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
-                      }
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).colorScheme.secondary),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
                         ),
                       ),
                     ),

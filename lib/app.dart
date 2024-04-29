@@ -21,13 +21,13 @@ class MyApp extends StatelessWidget {
           style: IconButton.styleFrom(
         foregroundColor: colorScheme.primary,
       )),
-       textTheme: TextTheme(
+      textTheme: TextTheme(
           titleLarge: TextStyle(color: colorScheme.primary),
           titleMedium: TextStyle(color: colorScheme.primary),
           titleSmall: TextStyle(color: colorScheme.primary)),
       iconTheme: IconThemeData(color: colorScheme.primary),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: colorScheme.secondaryContainer,
+        backgroundColor: colorScheme.primaryContainer,
         indicatorColor: colorScheme.onSecondary.withOpacity(0.5),
         iconTheme:
             MaterialStatePropertyAll(IconThemeData(color: colorScheme.primary)),
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       appBarTheme: AppBarTheme(
         elevation: 0,
-        color: colorScheme.secondaryContainer,
+        color: colorScheme.primaryContainer,
         titleTextStyle: TextStyle(
           color: colorScheme.secondary,
           fontSize: 20,

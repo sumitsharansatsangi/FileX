@@ -36,7 +36,7 @@ class CategoryProvider extends ChangeNotifier {
     downloads.clear();
     downloadTabs.add('All');
     List<Directory> storages = await FileUtils.getStorageList();
-    
+
     storages.forEach((dir) {
       if (Directory(dir.path + 'Download').existsSync()) {
         List<FileSystemEntity> files =
@@ -66,7 +66,7 @@ class CategoryProvider extends ChangeNotifier {
       getAllFilesWithIsolate,
       name: isolateName,
       onReceive: (val) {
-        debugPrint(val);
+        debugPrint(val.toString());
         isolates.kill(isolateName);
       },
       onInitialized: () => isolates.send('hey', to: isolateName),
@@ -75,17 +75,15 @@ class CategoryProvider extends ChangeNotifier {
     IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
     _port.listen((files) {
       debugPrint('RECEIVED SERVER PORT');
-      debugPrint(files);
-      for (final file in files){
-         String mimeType = mime(file) ?? '';
+      for (final file in files) {
+        String mimeType = mime(file) ?? '';
         if (mimeType.split('/')[0] == type) {
           images.add(file);
-          imageTabs
-              .add('${file.split('/')[file.split('/').length - 2]}');
-          imageTabs = imageTabs.toSet().toList();
+          imageTabs.add('${file.split('/')[file.split('/').length - 2]}');
         }
-        notifyListeners();
       }
+      imageTabs = imageTabs.toSet().toList();
+      notifyListeners();
       currentFiles = images;
       setLoading(false);
       _port.close();
@@ -100,18 +98,16 @@ class CategoryProvider extends ChangeNotifier {
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: false);
     debugPrint('Files $files');
+    debugPrint(files.length.toString());
     final messenger = HandledIsolate.initialize(context);
     try {
       final SendPort? send =
           IsolateNameServer.lookupPortByName('${isolateName}_2');
-     List<String> validFile=[];
-    for( final f in files ){
-      validFile.add(f.path);
-    }         
-      send!.send(validFile);
+      send!.send([for (final f in files) f.path]);
     } catch (e) {
       debugPrint(e.toString());
     }
+    debugPrint("laddoo");
     messenger.send('done');
   }
 
@@ -125,7 +121,7 @@ class CategoryProvider extends ChangeNotifier {
       getAllFilesWithIsolate,
       name: isolateName,
       onReceive: (val) {
-        debugPrint(val);
+        debugPrint(val.toString());
         isolates.kill(isolateName);
       },
       onInitialized: () => isolates.send('hey', to: isolateName),
@@ -134,7 +130,7 @@ class CategoryProvider extends ChangeNotifier {
     IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
     _port.listen((files) async {
       debugPrint('RECEIVED SERVER PORT');
-      debugPrint(files);
+      debugPrint(files.toString());
       List tabs = await compute(separateAudios, {'files': files, 'type': type});
       audio = tabs[0];
       audioTabs = tabs[1];
@@ -165,19 +161,18 @@ class CategoryProvider extends ChangeNotifier {
   static Future<List> separateAudios(Map body) async {
     List files = body['files'];
     String type = body['type'];
-    List<FileSystemEntity> audio = [];
+    List<String> audio = [];
     List<String> audioTabs = [];
-    for (File file in files) {
-      String mimeType = mime(file.path) ?? '';
-      debugPrint(extension(file.path));
-      if (type == 'text' && docExtensions.contains(extension(file.path))) {
+    for (final file in files) {
+      String mimeType = mime(file) ?? '';
+      debugPrint(extension(file));
+      if (type == 'text' && docExtensions.contains(extension(file))) {
         audio.add(file);
       }
       if (mimeType.isNotEmpty) {
         if (mimeType.split('/')[0] == type) {
           audio.add(file);
-          audioTabs
-              .add('${file.path.split('/')[file.path.split('/').length - 2]}');
+          audioTabs.add('${file.split('/')[file.split('/').length - 2]}');
           audioTabs = audioTabs.toSet().toList();
         }
       }

@@ -39,8 +39,7 @@ class FileIcon extends StatelessWidget {
               errorBuilder: (b, o, c) {
                 return Icon(Icons.image);
               },
-              image: ResizeImage(FileImage(File(file)),
-                  width: 50, height: 50),
+              image: ResizeImage(FileImage(File(file)), width: 50, height: 50),
             ),
           );
         case 'video':
@@ -52,7 +51,7 @@ class FileIcon extends StatelessWidget {
             ),
           );
         case 'audio':
-          return Icon(Feather.music, color: Colors.blue);
+          return Icon(Feather.music, color: Colors.teal);
         case 'text':
           return Icon(Feather.file_text, color: Colors.orangeAccent);
         default:

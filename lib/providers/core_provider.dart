@@ -77,16 +77,12 @@ class CoreProvider extends ChangeNotifier {
   static getFilesWithIsolate(Map<String, dynamic> context) async {
     debugPrint(context.toString());
     String isolateName = context['name'];
-    List<FileSystemEntity> l =
+    List<FileSystemEntity> files =
         await FileUtils.getRecentFiles(showHidden: false);
     final messenger = HandledIsolate.initialize(context);
     final SendPort? send =
         IsolateNameServer.lookupPortByName('${isolateName}_2');
-    List<String> validFile=[];
-    for( final f in l ){
-      validFile.add(f.path);
-    }      
-    send?.send(validFile);
+    send?.send([for (final f in files) f.path]);
     messenger.send('done');
   }
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:filex/providers/providers.dart';
 import 'package:filex/utils/utils.dart';
 import 'package:filex/widgets/widgets.dart';
@@ -49,10 +47,12 @@ class _CategoryState extends State<Category> {
                   appBar: AppBar(
                     title: Text('${widget.title}'),
                     bottom: TabBar(
-                      indicatorColor: Theme.of(context).colorScheme.secondary,
-                      labelColor: Theme.of(context).colorScheme.secondary,
+                      indicatorColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      labelColor:
+                          Theme.of(context).colorScheme.primaryContainer,
                       unselectedLabelColor:
-                          Theme.of(context).textTheme.bodySmall!.color,
+                          Theme.of(context).textTheme.titleSmall!.color,
                       isScrollable:
                           provider.audioTabs.length < 3 ? false : true,
                       tabs: Constants.map<Widget>(
@@ -74,12 +74,11 @@ class _CategoryState extends State<Category> {
                               List list = [];
                               List items = provider.audio;
                               items.forEach((file) {
-                                if ('${file.path.split('/')[file.path.split('/').length - 2]}' ==
+                                if ('${file.split('/')[file.split('/').length - 2]}' ==
                                     label) {
                                   list.add(file);
                                 }
                               });
-                              // debugPrint(label);
                               return ListView.separated(
                                 padding: EdgeInsets.only(left: 20),
                                 itemCount: index == 0
@@ -87,10 +86,10 @@ class _CategoryState extends State<Category> {
                                     : list.length,
                                 itemBuilder:
                                     (BuildContext context, int index2) {
-                                  FileSystemEntity file = index == 0
+                                  final String file = index == 0
                                       ? provider.audio[index2]
                                       : list[index2];
-                                  return FileItem(file: file.path);
+                                  return FileItem(file: file);
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {

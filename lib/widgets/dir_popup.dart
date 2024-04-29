@@ -19,13 +19,25 @@ class DirPopup extends StatelessWidget {
         PopupMenuItem(
           value: 0,
           child: Text(
-            'Rename', style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
+            'Rename',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
           ),
         ),
         PopupMenuItem(
           value: 1,
           child: Text(
-            'Delete', style: TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
+            'Delete',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Text(
+            'Share',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.titleSmall!.color),
           ),
         ),
       ],

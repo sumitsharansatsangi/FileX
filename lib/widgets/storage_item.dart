@@ -32,36 +32,41 @@ class StorageItem extends StatelessWidget {
         );
       },
       contentPadding: EdgeInsets.only(right: 20),
-      leading: Container(
+      leading: SizedBox(
         height: 40,
         width: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            width: 2,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              width: 2,
+            ),
+          ),
+          child: Center(
+            child: Icon(icon, color: color),
           ),
         ),
-        child: Center(
-          child: Icon(icon, color: color),
-        ),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title,style: Theme.of(context).textTheme.titleMedium,),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           Text(
             '${FileUtils.formatBytes(usedSpace, 2)} '
             'used of ${FileUtils.formatBytes(totalSpace, 2)}',
             style: TextStyle(
               fontWeight: FontWeight.w400,
-              fontSize: 14.0,
+              fontSize: 12.0,
               color: Theme.of(context).textTheme.titleMedium!.color,
             ),
           ),
         ],
       ),
-      subtitle: Container(
+      subtitle: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:path/path.dart' as pathlib;
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Folder extends StatefulWidget {
   final String title;
@@ -169,9 +170,11 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
                 return DirectoryItem(
                   popTap: (v) async {
                     if (v == 0) {
-                      renameDialog(context, file.path, 'dir');
+                      await renameDialog(context, file.path, 'dir');
                     } else if (v == 1) {
-                      deleteFile(true, file);
+                      await deleteFile(true, file);
+                    } else if (v == 2) {
+                      await shareFile(true, file);
                     }
                   },
                   file: file,
@@ -187,12 +190,11 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
                 file: file.path,
                 popTap: (v) async {
                   if (v == 0) {
-                    renameDialog(context, file.path, 'file');
+                    await renameDialog(context, file.path, 'file');
                   } else if (v == 1) {
-                    deleteFile(false, file);
+                    await deleteFile(false, file);
                   } else if (v == 2) {
-                    /// TODO: Implement Share file feature
-                    debugPrint('Share');
+                    await shareFile(false, file);
                   }
                 },
               );
@@ -209,6 +211,27 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  shareFile(bool directory, var file) async {
+    try {
+      if (directory) {
+        final fileList = await Directory(file.path).list(recursive: true);
+          List<XFile> files = [];
+        await for (final file in fileList) {
+          if (FileSystemEntity.isFileSync(file.path)) {
+             if (XFile(file.path).name.split(".")[0].isNotEmpty) {
+          files.add(XFile(file.path));
+             }
+          }
+        }
+        await Share.shareXFiles(files);
+      } else {
+        await Share.shareXFiles([XFile(file.path)]);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   deleteFile(bool directory, var file) async {

@@ -10,7 +10,9 @@ import 'package:path_provider/path_provider.dart';
 
 class FileUtils {
   static String waPath1 = '/storage/emulated/0/WhatsApp/Media/.Statuses';
-  static String waPath2 = '/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses';
+  static String waPath2 =
+      '/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses';
+
   /// Convert Byte to KB, MB, .......
   static String formatBytes(bytes, decimals) {
     if (bytes == 0) return '0.0 KB';

@@ -25,16 +25,21 @@ class FileItem extends StatelessWidget {
       leading: FileIcon(file: file),
       title: Text(
         '${basename(file)}',
-        style: TextStyle(fontSize: 14,color: Theme.of(context).textTheme.titleSmall!.color),
+        style: TextStyle(
+            fontSize: 14, color: Theme.of(context).textTheme.titleSmall!.color),
         maxLines: 2,
       ),
       subtitle: Text(
         '${FileUtils.formatBytes(File(file).lengthSync(), 2)},'
         ' ${FileUtils.formatTime(File(file).lastModifiedSync().toIso8601String())}',
-        style: TextStyle(color:Theme.of(context).textTheme.titleSmall!.color!.withOpacity(0.6)),
+        style: TextStyle(
+            color: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .color!
+                .withOpacity(0.6)),
       ),
-      trailing:
-          popTap == null ? null : FilePopup(path: file, popTap: popTap!),
+      trailing: popTap == null ? null : FilePopup(path: file, popTap: popTap!),
     );
   }
 }

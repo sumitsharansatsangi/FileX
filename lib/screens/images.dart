@@ -50,10 +50,10 @@ class _ImagesState extends State<Images> {
             appBar: AppBar(
               title: Text('${widget.title}'),
               bottom: TabBar(
-                indicatorColor: Theme.of(context).colorScheme.secondary,
-                labelColor: Theme.of(context).colorScheme.secondary,
+                indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+                labelColor: Theme.of(context).colorScheme.primaryContainer,
                 unselectedLabelColor:
-                    Theme.of(context).textTheme.bodySmall!.color,
+                    Theme.of(context).textTheme.titleSmall!.color,
                 isScrollable: provider.imageTabs.length < 3 ? false : true,
                 tabs: Constants.map<Widget>(
                   provider.imageTabs,
@@ -73,7 +73,6 @@ class _ImagesState extends State<Images> {
                   provider.imageTabs,
                   (index, label) {
                     List l = provider.currentFiles;
-
                     return CustomScrollView(
                       primary: false,
                       slivers: <Widget>[
@@ -88,11 +87,9 @@ class _ImagesState extends State<Images> {
                                   ? provider.images
                                   : l.reversed.toList(),
                               (index, item) {
-                                File file = File(item.path);
-                                String path = file.path;
-                                String mimeType = mime(path) ?? '';
+                                String mimeType = mime(item) ?? '';
                                 return _MediaTile(
-                                    file: file, mimeType: mimeType);
+                                    file: item, mimeType: mimeType);
                               },
                             ),
                           ),
@@ -111,7 +108,7 @@ class _ImagesState extends State<Images> {
 }
 
 class _MediaTile extends StatelessWidget {
-  final File file;
+  final String file;
   final String mimeType;
 
   _MediaTile({required this.file, required this.mimeType});
@@ -119,59 +116,61 @@ class _MediaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => OpenFilex.open(file.path),
+      onTap: () => OpenFilex.open(file),
       child: GridTile(
-        header: Container(
+        header: SizedBox(
           height: 50,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black54, Colors.transparent],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black54, Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
-          ),
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: mimeType.split('/')[0] == 'video'
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          '${FileUtils.formatBytes(file.lengthSync(), 1)}',
-                          style: TextStyle(
-                            fontSize: 12,
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: mimeType.split('/')[0] == 'video'
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            '${FileUtils.formatBytes(File(file).lengthSync(), 1)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.play_circle_filled,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ],
+                      )
+                    : Text(
+                        '${FileUtils.formatBytes(File(file).lengthSync(), 1)}',
+                        style: TextStyle(
+                          fontSize: 12,
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.play_circle_filled,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                      ],
-                    )
-                  : Text(
-                      '${FileUtils.formatBytes(file.lengthSync(), 1)}',
-                      style: TextStyle(
-                        fontSize: 12,
                       ),
-                    ),
+              ),
             ),
           ),
         ),
         child: mimeType.split('/')[0] == 'video'
-            ? FileIcon(file: file.path)
+            ? FileIcon(file: file)
             : Image(
                 fit: BoxFit.cover,
                 errorBuilder: (b, o, c) {
                   return Icon(Icons.image);
                 },
                 image: ResizeImage(
-                  FileImage(File(file.path)),
+                  FileImage(File(file)),
                   width: 150,
                   height: 150,
                 ),

@@ -32,8 +32,20 @@ class AppScreen extends StatelessWidget {
                   leading: app.icon != null
                       ? Image.memory(app.icon!, height: 40, width: 40)
                       : null,
-                  title: Text(app.appName),
-                  subtitle: Text('${app.packageName}'),
+                  title: Text(
+                    app.appName,
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.titleSmall!.color),
+                  ),
+                  subtitle: Text(
+                    '${app.packageName}',
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .color!
+                            .withOpacity(0.6)),
+                  ),
                   onTap: () => DeviceApps.openApp(app.packageName),
                 );
               },
