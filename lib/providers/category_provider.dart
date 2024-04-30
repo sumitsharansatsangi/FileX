@@ -62,6 +62,7 @@ class CategoryProvider extends ChangeNotifier {
     images.clear();
     imageTabs.add('All');
     String isolateName = type;
+    String isolateName2 = '${isolateName}_2';
     isolates.spawn<String>(
       getAllFilesWithIsolate,
       name: isolateName,
@@ -72,7 +73,7 @@ class CategoryProvider extends ChangeNotifier {
       onInitialized: () => isolates.send('hey', to: isolateName),
     );
     ReceivePort _port = ReceivePort();
-    IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
+    IsolateNameServer.registerPortWithName(_port.sendPort, isolateName2);
     _port.listen((files) {
       debugPrint('RECEIVED SERVER PORT');
       for (final file in files) {
@@ -87,13 +88,14 @@ class CategoryProvider extends ChangeNotifier {
       currentFiles = images;
       setLoading(false);
       _port.close();
-      IsolateNameServer.removePortNameMapping('${isolateName}_2');
+      IsolateNameServer.removePortNameMapping(isolateName2);
     });
   }
 
   static getAllFilesWithIsolate(Map<String, dynamic> context) async {
     debugPrint(context.toString());
     String isolateName = context['name'];
+    String isolateName2 = '${isolateName}_2';
     debugPrint('Get files');
     List<FileSystemEntity> files =
         await FileUtils.getAllFiles(showHidden: false);
@@ -102,7 +104,7 @@ class CategoryProvider extends ChangeNotifier {
     final messenger = HandledIsolate.initialize(context);
     try {
       final SendPort? send =
-          IsolateNameServer.lookupPortByName('${isolateName}_2');
+          IsolateNameServer.lookupPortByName(isolateName2);
       send!.send([for (final f in files) f.path]);
     } catch (e) {
       debugPrint(e.toString());
@@ -117,6 +119,7 @@ class CategoryProvider extends ChangeNotifier {
     audio.clear();
     audioTabs.add('All');
     String isolateName = type;
+    String isolateName2 = '${isolateName}_2';
     isolates.spawn<String>(
       getAllFilesWithIsolate,
       name: isolateName,
@@ -127,7 +130,7 @@ class CategoryProvider extends ChangeNotifier {
       onInitialized: () => isolates.send('hey', to: isolateName),
     );
     ReceivePort _port = ReceivePort();
-    IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
+    IsolateNameServer.registerPortWithName(_port.sendPort, isolateName2);
     _port.listen((files) async {
       debugPrint('RECEIVED SERVER PORT');
       debugPrint(files.toString());
@@ -136,7 +139,7 @@ class CategoryProvider extends ChangeNotifier {
       audioTabs = tabs[1];
       setLoading(false);
       _port.close();
-      IsolateNameServer.removePortNameMapping('${isolateName}_2');
+      IsolateNameServer.removePortNameMapping(isolateName2);
     });
   }
 

@@ -54,6 +54,7 @@ class CoreProvider extends ChangeNotifier {
   /// to send it back to the main Thread
   getRecentFiles() async {
     String isolateName = 'recent';
+    String isolateName2='${isolateName}_2';
     isolates.spawn<String>(
       getFilesWithIsolate,
       name: isolateName,
@@ -64,24 +65,25 @@ class CoreProvider extends ChangeNotifier {
       onInitialized: () => isolates.send('hey', to: isolateName),
     );
     ReceivePort _port = ReceivePort();
-    IsolateNameServer.registerPortWithName(_port.sendPort, '${isolateName}_2');
+    IsolateNameServer.registerPortWithName(_port.sendPort, isolateName2);
     _port.listen((message) {
       debugPrint('RECEIVED SERVER PORT');
       recentFiles.addAll(message);
       setRecentLoading(false);
       _port.close();
-      IsolateNameServer.removePortNameMapping('${isolateName}_2');
+      IsolateNameServer.removePortNameMapping(isolateName2);
     });
   }
 
   static getFilesWithIsolate(Map<String, dynamic> context) async {
     debugPrint(context.toString());
     String isolateName = context['name'];
+    String isolateName2 = '${isolateName}_2';
     List<FileSystemEntity> files =
         await FileUtils.getRecentFiles(showHidden: false);
     final messenger = HandledIsolate.initialize(context);
     final SendPort? send =
-        IsolateNameServer.lookupPortByName('${isolateName}_2');
+        IsolateNameServer.lookupPortByName(isolateName2);
     send?.send([for (final f in files) f.path]);
     messenger.send('done');
   }
