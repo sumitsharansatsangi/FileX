@@ -22,7 +22,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.2 
   flutter_icons:
-    git: git@github.com:jibiel/flutter-icons.git
+    git: https://github.com/jibiel/flutter-icons.git
   percent_indicator: ^4.2.2
   mime_type: ^1.0.0
   shared_preferences:
