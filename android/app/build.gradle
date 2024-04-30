@@ -67,23 +67,25 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            // useProguard true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.pro"
-            //Other parameters
-            debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
-            // signingConfig playStoreConfig //Add your own signing config
-            pseudoLocalesEnabled false
+             minifyEnabled = true
+            shrinkResources = true
+            // minifyEnabled true
+            // // useProguard true
+            // shrinkResources true
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.pro"
+            // //Other parameters
+            // debuggable false
+            // jniDebuggable false
+            // renderscriptDebuggable false
+            // // signingConfig playStoreConfig //Add your own signing config
+            // pseudoLocalesEnabled false
         }
         debug {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            // useProguard true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // minifyEnabled true
+            // // useProguard true
+            // shrinkResources true
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     lint {
