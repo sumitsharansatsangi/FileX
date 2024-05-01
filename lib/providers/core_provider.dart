@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:isolate_handler/isolate_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
+@pragma('vm:entry-point')
 class CoreProvider extends ChangeNotifier {
   List<FileSystemEntity> availableStorage = <FileSystemEntity>[];
   List<String> recentFiles = <String>[];

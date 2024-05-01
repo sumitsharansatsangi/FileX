@@ -217,12 +217,12 @@ class _FolderState extends State<Folder> with WidgetsBindingObserver {
     try {
       if (directory) {
         final fileList = await Directory(file.path).list(recursive: true);
-          List<XFile> files = [];
+        List<XFile> files = [];
         await for (final file in fileList) {
           if (FileSystemEntity.isFileSync(file.path)) {
-             if (XFile(file.path).name.split(".")[0].isNotEmpty) {
-          files.add(XFile(file.path));
-             }
+            if (pathlib.basename(file.path).startsWith('.')) {
+              files.add(XFile(file.path));
+            }
           }
         }
         await Share.shareXFiles(files);

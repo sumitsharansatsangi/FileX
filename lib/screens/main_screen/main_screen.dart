@@ -40,10 +40,6 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(Feather.folder),
               label: 'Browse',
             ),
-            // NavigationDestination(
-            //   icon: Icon(Feather.share_2),
-            //   label: 'FTP',
-            // ),
             NavigationDestination(
               icon: Icon(Feather.settings),
               label: 'Settings',

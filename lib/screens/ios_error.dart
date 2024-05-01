@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IosError extends StatelessWidget {
+  const IosError({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

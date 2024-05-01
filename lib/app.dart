@@ -1,13 +1,15 @@
 import 'dart:io';
-import 'package:filex/screens/ios_error.dart';
-import 'package:filex/screens/splash.dart';
-import 'package:filex/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/theme_provider.dart';
+import 'screens/ios_error.dart';
+import 'screens/splash.dart';
+import 'utils/utils.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.fromSeed(
@@ -89,7 +91,7 @@ class MyApp extends StatelessWidget {
                   : ThemeMode.light,
           theme: lightTheme,
           darkTheme: darkTheme,
-          home: Platform.isIOS ? IosError() : Splash(),
+          home: Platform.isIOS ? const IosError() : const Splash(),
         );
       },
     );

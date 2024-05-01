@@ -56,7 +56,7 @@ class CategoryProvider extends ChangeNotifier {
     setLoading(false);
   }
 
-  getImages(String type) async {
+  getImages(String type) {
     setLoading(true);
     imageTabs.clear();
     images.clear();
@@ -109,11 +109,10 @@ class CategoryProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
-    debugPrint("laddoo");
     messenger.send('done');
   }
 
-  getAudios(String type) async {
+  getAudios(String type) {
     setLoading(true);
     audioTabs.clear();
     audio.clear();
@@ -143,25 +142,25 @@ class CategoryProvider extends ChangeNotifier {
     });
   }
 
-  switchCurrentFiles(List list, String label) async {
-    List<FileSystemEntity> l = await compute(getTabImages, [list, label]);
-    currentFiles = l.map((e) => e.path).toList();
+  Future<void> switchCurrentFiles(List list, String label) async {
+    List<String> l = await compute(getTabImages, [list, label]);
+    currentFiles = l.map((e) => e).toList();
     notifyListeners();
   }
 
-  static Future<List<FileSystemEntity>> getTabImages(List item) async {
+  static List<String> getTabImages(List item){
     List items = item[0];
     String label = item[1];
-    List<FileSystemEntity> files = [];
+    List<String> files = [];
     items.forEach((file) {
-      if ('${file.path.split('/')[file.path.split('/').length - 2]}' == label) {
-        files.add(file.path);
+      if ('${file.split('/')[file.split('/').length - 2]}' == label) {
+        files.add(file);
       }
     });
     return files;
   }
 
-  static Future<List> separateAudios(Map body) async {
+  static List separateAudios(Map body) {
     List files = body['files'];
     String type = body['type'];
     List<String> audio = [];

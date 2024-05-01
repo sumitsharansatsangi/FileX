@@ -8,6 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Splash extends StatefulWidget {
+  const Splash({super.key});
   @override
   _SplashState createState() => _SplashState();
 }
