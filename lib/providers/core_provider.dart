@@ -2,60 +2,83 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:filex/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:isolate_handler/isolate_handler.dart';
+import 'package:filex/utils/file_utils.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@pragma('vm:entry-point')
-class CoreProvider extends ChangeNotifier {
-  List<FileSystemEntity> availableStorage = <FileSystemEntity>[];
-  List<String> recentFiles = <String>[];
-  final isolates = IsolateHandler();
-  int totalSpace = 0;
-  int freeSpace = 0;
-  int totalSDSpace = 0;
-  int freeSDSpace = 0;
-  int usedSpace = 0;
-  int usedSDSpace = 0;
-  bool storageLoading = true;
-  bool recentLoading = true;
+part 'core_provider.g.dart';
 
-  checkSpace() async {
-    setRecentLoading(true);
-    setStorageLoading(true);
-    recentFiles.clear();
-    availableStorage.clear();
-    List<Directory> dirList = (await getExternalStorageDirectories())!;
-    availableStorage.addAll(dirList);
-    notifyListeners();
-    MethodChannel platform = MethodChannel('dev.jideguru.filex/storage');
-    var free = await platform.invokeMethod('getStorageFreeSpace');
-    var total = await platform.invokeMethod('getStorageTotalSpace');
-    setFreeSpace(free);
-    setTotalSpace(total);
-    setUsedSpace(total - free);
+
+@riverpod
+ List<FileSystemEntity> availableStorage( AvailableStorageRef ref ){
+    return <FileSystemEntity>[];
+ }
+
+@riverpod
+class RecentFile extends _$RecentFile {
+  @override
+  List<String> build() {
+    return <String>[];
+  }
+
+  void update(List<String> value) {
+    state = value;
+  }
+}
+
+@riverpod
+class TotalSpace extends _$TotalSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+
+@riverpod
+class UsedSpace extends _$UsedSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+class TotalSDSpace extends _$TotalSDSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+class UsedSDSpace extends _$UsedSDSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+Future<void> checkSpaceAndRecentFiles(
+    CheckSpaceAndRecentFilesRef ref) async {
+  List<Directory>? dirList = await getExternalStorageDirectories();
+  if (dirList != null) {
+    ref.read(availableStorageProvider).clear();
+    ref.read(availableStorageProvider).addAll(dirList);
+    MethodChannel platform = const MethodChannel('com.kumpali.filex/storage');
+    final free = await platform.invokeMethod('getStorageFreeSpace');
+    final total = await platform.invokeMethod('getStorageTotalSpace');
+    ref.read(totalSpaceProvider.notifier).assign(total);
+    ref.read(usedSpaceProvider.notifier).assign(total-free);
     if (dirList.length > 1) {
       var freeSD = await platform.invokeMethod('getExternalStorageFreeSpace');
       var totalSD = await platform.invokeMethod('getExternalStorageTotalSpace');
-      setFreeSDSpace(freeSD);
-      setTotalSDSpace(totalSD);
-      setUsedSDSpace(totalSD - freeSD);
+      ref.read(usedSDSpaceProvider.notifier).assign(totalSD-freeSD);
+      ref.read(totalSDSpaceProvider.notifier).assign(totalSD);
     }
-    setStorageLoading(false);
-    getRecentFiles();
-  }
-
-  /// I had to use a combination of [isolate_handler] plugin and
-  /// [IsolateNameServer] because compute doesnt work as my function uses
-  /// an external plugin and also [isolate_handler] plugin doesnt allow me
-  /// to pass complex data (in this case List<FileSystemEntity>). so basically
-  /// i used the [isolate_handler] to do get the file and use [IsolateNameServer]
-  /// to send it back to the main Thread
-  getRecentFiles() async {
+    final isolates = IsolateHandler();
     String isolateName = 'recent';
-    String isolateName2='${isolateName}_2';
+    String isolateName2 = '${isolateName}_2';
     isolates.spawn<String>(
       getFilesWithIsolate,
       name: isolateName,
@@ -65,67 +88,26 @@ class CoreProvider extends ChangeNotifier {
       },
       onInitialized: () => isolates.send('hey', to: isolateName),
     );
-    ReceivePort _port = ReceivePort();
-    IsolateNameServer.registerPortWithName(_port.sendPort, isolateName2);
-    _port.listen((message) {
+    ReceivePort port = ReceivePort();
+    IsolateNameServer.registerPortWithName(port.sendPort, isolateName2);
+    port.listen((message) {
       debugPrint('RECEIVED SERVER PORT');
-      recentFiles.addAll(message);
-      setRecentLoading(false);
-      _port.close();
+        ref.read(recentFileProvider).clear();    
+     ref.read(recentFileProvider.notifier).update(message);
+      port.close();
       IsolateNameServer.removePortNameMapping(isolateName2);
     });
   }
+}
 
-  static getFilesWithIsolate(Map<String, dynamic> context) async {
-    debugPrint(context.toString());
-    String isolateName = context['name'];
-    String isolateName2 = '${isolateName}_2';
-    List<FileSystemEntity> files =
-        await FileUtils.getRecentFiles(showHidden: false);
-    final messenger = HandledIsolate.initialize(context);
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName(isolateName2);
-    send?.send([for (final f in files) f.path]);
-    messenger.send('done');
-  }
-
-  void setFreeSpace(value) {
-    freeSpace = value;
-    notifyListeners();
-  }
-
-  void setTotalSpace(value) {
-    totalSpace = value;
-    notifyListeners();
-  }
-
-  void setUsedSpace(value) {
-    usedSpace = value;
-    notifyListeners();
-  }
-
-  void setFreeSDSpace(value) {
-    freeSDSpace = value;
-    notifyListeners();
-  }
-
-  void setTotalSDSpace(value) {
-    totalSDSpace = value;
-    notifyListeners();
-  }
-
-  void setUsedSDSpace(value) {
-    usedSDSpace = value;
-    notifyListeners();
-  }
-
-  void setStorageLoading(value) {
-    storageLoading = value;
-    notifyListeners();
-  }
-
-  void setRecentLoading(value) {
-    recentLoading = value;
-    notifyListeners();
-  }
+Future<void> getFilesWithIsolate(Map<String, dynamic> context) async {
+  debugPrint(context.toString());
+  String isolateName = context['name'];
+  String isolateName2 = '${isolateName}_2';
+  List<FileSystemEntity> files =
+      await FileUtils.getRecentFiles(showHidden: false);
+  final messenger = HandledIsolate.initialize(context);
+  final SendPort? send = IsolateNameServer.lookupPortByName(isolateName2);
+  send?.send([for (final f in files) f.path]);
+  messenger.send('done');
 }

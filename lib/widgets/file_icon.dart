@@ -1,34 +1,33 @@
 import 'dart:io';
 
-import 'package:filex/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:filex/providers/category_provider.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FileIcon extends StatelessWidget {
   final String file;
 
-  FileIcon({
-    Key? key,
+  const FileIcon({
+    super.key,
     required this.file,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    String _extension = extension(file).toLowerCase();
+    String ext = extension(file).toLowerCase();
     String mimeType = mime(basename(file).toLowerCase()) ?? '';
     String type = mimeType.isEmpty ? '' : mimeType.split('/')[0];
-    if (_extension == '.apk') {
-      return Icon(Icons.android, color: Colors.green);
-    } else if (_extension == '.crdownload') {
-      return Icon(Feather.download, color: Colors.lightBlue);
-    } else if (_extension == '.zip' || _extension.contains('tar')) {
-      return Icon(Feather.archive);
-    } else if (_extension == '.epub' ||
-        _extension == '.pdf' ||
-        _extension == '.mobi') {
-      return Icon(Feather.file_text, color: Colors.orangeAccent);
+    if (ext == '.apk') {
+      return const Icon(Icons.android, color: Colors.green);
+    } else if (ext == '.crdownload') {
+      return const Icon(Feather.download, color: Colors.lightBlue);
+    } else if (ext == '.zip' || ext.contains('tar')) {
+      return const Icon(Feather.archive);
+    } else if (ext == '.epub' || ext == '.pdf' || ext == '.mobi') {
+      return const Icon(Feather.file_text, color: Colors.orangeAccent);
     } else {
       switch (type) {
         case 'image':
@@ -37,7 +36,7 @@ class FileIcon extends StatelessWidget {
             height: 50,
             child: Image(
               errorBuilder: (b, o, c) {
-                return Icon(Icons.image);
+                return const Icon(Icons.image);
               },
               image: ResizeImage(FileImage(File(file)), width: 50, height: 50),
             ),
@@ -46,16 +45,29 @@ class FileIcon extends StatelessWidget {
           return SizedBox(
             height: 40,
             width: 40,
-            child: VideoThumbnail(
-              path: file,
+            child: Consumer(
+              builder: (context, ref, child) {
+                final thumbnail = ref.watch(getThumbnailProvider(file));
+                return thumbnail.when(data: (t) {
+                   if(t!=null){
+                    return Image.memory(t);
+                    }else{
+                      return const Icon(Icons.error);
+                    }
+                }, error: (a, b) {
+                  return const Text("Error");
+                }, loading: () {
+                  return const Center(child: CircularProgressIndicator());
+                });
+              },
             ),
           );
         case 'audio':
-          return Icon(Feather.music, color: Colors.teal);
+          return const Icon(Feather.music, color: Colors.teal);
         case 'text':
-          return Icon(Feather.file_text, color: Colors.orangeAccent);
+          return const Icon(Feather.file_text, color: Colors.orangeAccent);
         default:
-          return Icon(Feather.file);
+          return const Icon(Feather.file);
       }
     }
   }

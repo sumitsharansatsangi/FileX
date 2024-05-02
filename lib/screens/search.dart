@@ -1,12 +1,13 @@
 import 'dart:io';
-
-import 'package:filex/providers/providers.dart';
-import 'package:filex/screens/folder/folder.dart';
-import 'package:filex/utils/utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:filex/providers/category_provider.dart';
+import 'package:filex/screens/folder.dart';
+import 'package:filex/utils/navigate.dart';
+import 'package:filex/widgets/custom_divider.dart';
+import 'package:filex/widgets/custom_loader.dart';
 import 'package:filex/widgets/dir_item.dart';
 import 'package:filex/widgets/file_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Search extends SearchDelegate {
   final ThemeData themeData;
@@ -38,7 +39,7 @@ class Search extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -49,7 +50,7 @@ class Search extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -58,20 +59,22 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<FileSystemEntity>>(
-      future: FileUtils.searchFiles(query,
-          showHidden:
-              Provider.of<CategoryProvider>(context, listen: false).showHidden),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.isEmpty) {
-            return Center(child: Text('No file match your query!'));
+    return Consumer(
+      builder: (context, ref, child) {
+        final searchFiles = ref.watch(searchFilesProvider(query));
+        return searchFiles.when(data: (data) {
+          if (data.isEmpty) {
+            return Center(
+                child: Text(
+              'No file match your query!',
+              style: Theme.of(context).textTheme.titleLarge,
+            ));
           } else {
             return ListView.separated(
-              padding: EdgeInsets.only(left: 20),
-              itemCount: snapshot.data.length,
+              padding: const EdgeInsets.only(left: 20),
+              itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
-                FileSystemEntity file = snapshot.data[index];
+                FileSystemEntity file = data[index];
                 if (file.toString().split(':')[0] == 'Directory') {
                   return DirectoryItem(
                     popTap: null,
@@ -87,43 +90,37 @@ class Search extends SearchDelegate {
                 return FileItem(file: file.path, popTap: null);
               },
               separatorBuilder: (BuildContext context, int index) {
-                return Stack(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        height: 1,
-                        color: Theme.of(context).dividerColor,
-                        width: MediaQuery.of(context).size.width - 70,
-                      ),
-                    ),
-                  ],
-                );
+                return const CustomDivider();
               },
             );
           }
-        } else {
-          return SizedBox();
-        }
+        }, error: (data, err) {
+          return const Text("Error occurred");
+        }, loading: () {
+          return const CustomLoader();
+        });
       },
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var provider = Provider.of<CategoryProvider>(context, listen: false);
-    return FutureBuilder<List<FileSystemEntity>>(
-      future: FileUtils.searchFiles(query, showHidden: provider.showHidden),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data.isEmpty) {
-            return Center(child: Text('No file match your query!'));
+    return Consumer(
+      builder: (context, ref, child) {
+        final searchFiles = ref.watch(searchFilesProvider(query));
+        return searchFiles.when(data: (data) {
+          if (data.isEmpty) {
+            return Center(
+                child: Text(
+              'No file match your query!',
+              style: Theme.of(context).textTheme.titleLarge,
+            ));
           } else {
             return ListView.separated(
-              padding: EdgeInsets.only(left: 20),
-              itemCount: snapshot.data.length,
+              padding: const EdgeInsets.only(left: 20),
+              itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
-                FileSystemEntity file = snapshot.data[index];
+                FileSystemEntity file = data[index];
                 if (file.toString().split(':')[0] == 'Directory') {
                   return DirectoryItem(
                     popTap: null,
@@ -139,24 +136,15 @@ class Search extends SearchDelegate {
                 return FileItem(file: file.path, popTap: null);
               },
               separatorBuilder: (BuildContext context, int index) {
-                return Stack(
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        height: 1,
-                        color: Theme.of(context).dividerColor,
-                        width: MediaQuery.of(context).size.width - 70,
-                      ),
-                    ),
-                  ],
-                );
+                return const CustomDivider();
               },
             );
           }
-        } else {
-          return SizedBox();
-        }
+        }, error: (data, err) {
+          return const Text("Error occurred");
+        }, loading: () {
+          return const CustomLoader();
+        });
       },
     );
   }

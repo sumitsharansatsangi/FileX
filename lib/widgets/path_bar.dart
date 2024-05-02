@@ -6,16 +6,16 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(int) onChanged;
   final IconData? icon;
 
-  PathBar({
-    Key? key,
+  const PathBar({
+    super.key,
     required this.paths,
     required this.onChanged,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 50,
       child: Align(
         alignment: Alignment.centerLeft,
@@ -43,7 +43,7 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
                 height: 40,
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Text(
                       '${splited[splited.length - 1]}',
                       style: TextStyle(
@@ -60,7 +60,7 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Icon(Feather.chevron_right);
+            return const Icon(Feather.chevron_right);
           },
         ),
       ),
@@ -68,5 +68,5 @@ class PathBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(40.0);
+  Size get preferredSize => const Size.fromHeight(40.0);
 }

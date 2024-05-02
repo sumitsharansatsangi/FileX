@@ -7,7 +7,7 @@ To download apk:
 - Tap on the button below(it will take you to another page)
 - Scroll down the page to download `apk-release.apk`
 <br>
-<a href="https://play.google.com/store/apps/details?id=dev.jideguru.filex">
+<a href="https://play.google.com/store/apps/details?id=com.kumpali.filex">
     <img src="https://lh3.googleusercontent.com/qF9r3ZjtgG-qyHdmjecArtKiulz1gmwL_xl9R3_fzk6igSeoN0wYbJSKEX5d_fxJRwYZJpHbqcLB3i9atl-9dOfUl9an7U43TfZ9PtQ=s0" width="200"></img>
 </a>
 <br>
@@ -26,6 +26,7 @@ To download apk:
 - [ ] Copy/Move/Paste Files.
 - [x] Delete Files/Folders.
 - [x] Rename Files/Folders.
+- [x] Share Files/Folders.
 - [x] Dark Mode.
 - [ ] FTP.
 - [x] Whatsapp Status Saver.
@@ -43,11 +44,11 @@ To download apk:
 ## 🔌 Plugins
 | Name | Usage |
 |------|-------|
-|[**Provider**](https://pub.dev/packages/provider)| State Management|
-|[**Open File**](https://pub.dev/packages/open_file)| To open files Natively|
+|[**Riverpod**](https://pub.dev/packages/flutter_riverpod)| State Management|
+|[**Open FileX**](https://pub.dev/packages/open_filex)| To open files Natively|
 |[**Device Apps**](https://pub.dev/packages/device_apps)| Get list of apps installed on Device|
 |[**Mime Type**](https://pub.dev/packages/mime_type)| Get mime type of a file|
-|[**Video Player**](https://pub.dev/packages/video_player)| Get thumbnail from a video file|
+|[**Video Thumbnail**](https://pub.dev/packages/video_thumbnail)| Get thumbnail from a video file|
 
 
 ## 🤓 Author(s)

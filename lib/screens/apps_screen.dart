@@ -1,13 +1,16 @@
 import 'package:device_apps/device_apps.dart';
-import 'package:filex/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:filex/widgets/custom_divider.dart';
+import 'package:filex/widgets/custom_loader.dart';
 
 class AppScreen extends StatelessWidget {
+  const AppScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Installed Apps'),
+        title: const Text('Installed Apps'),
       ),
       body: FutureBuilder<List<Application>>(
         future: DeviceApps.getInstalledApplications(
@@ -20,11 +23,11 @@ class AppScreen extends StatelessWidget {
             List<Application>? data = snapshot.data;
             // Sort the App List on Alphabetical Order
             data!
-              ..sort((app1, app2) => app1.appName
+              .sort((app1, app2) => app1.appName
                   .toLowerCase()
                   .compareTo(app2.appName.toLowerCase()));
             return ListView.separated(
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 Application app = data[index];
@@ -38,7 +41,7 @@ class AppScreen extends StatelessWidget {
                         color: Theme.of(context).textTheme.titleSmall!.color),
                   ),
                   subtitle: Text(
-                    '${app.packageName}',
+                    app.packageName,
                     style: TextStyle(
                         color: Theme.of(context)
                             .textTheme
@@ -50,11 +53,11 @@ class AppScreen extends StatelessWidget {
                 );
               },
               separatorBuilder: (BuildContext context, int index) {
-                return CustomDivider();
+                return const CustomDivider();
               },
             );
           }
-          return CustomLoader();
+          return const CustomLoader();
         },
       ),
     );

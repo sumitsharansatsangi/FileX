@@ -1,80 +1,71 @@
-import 'package:filex/providers/providers.dart';
-import 'package:filex/utils/utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:filex/providers/category_provider.dart';
+import 'package:filex/utils/consts.dart';
 import 'package:filex/widgets/custom_divider.dart';
+import 'package:filex/widgets/custom_loader.dart';
 import 'package:filex/widgets/file_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
 
-class Downloads extends StatefulWidget {
+class Downloads extends ConsumerWidget {
   final String title;
 
-  Downloads({
-    Key? key,
+  const Downloads({
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
-  _DownloadsState createState() => _DownloadsState();
-}
-
-class _DownloadsState extends State<Downloads> {
-  @override
-  void initState() {
-    super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Provider.of<CategoryProvider>(context, listen: false).getDownloads();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer(
-      builder:
-          (BuildContext context, CategoryProvider provider, Widget? child) {
-        return DefaultTabController(
-          length: provider.downloadTabs.length,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('${widget.title}'),
-              bottom: TabBar(
-                indicatorColor: Theme.of(context).colorScheme.primaryContainer,
-                labelColor: Theme.of(context).colorScheme.primaryContainer,
-                unselectedLabelColor:
-                    Theme.of(context).textTheme.titleSmall!.color,
-                isScrollable: false,
-                tabs: Constants.map<Widget>(
-                  provider.downloadTabs,
-                  (index, label) {
-                    return Tab(text: '$label');
-                  },
-                ),
-              ),
-            ),
-            body: Visibility(
-              visible: provider.downloads.isNotEmpty,
-              replacement: Center(child: Text('No Files Found')),
-              child: TabBarView(
-                children: Constants.map<Widget>(
-                  provider.downloadTabs,
-                  (index, label) {
-                    return ListView.separated(
-                      padding: EdgeInsets.only(left: 20),
-                      itemCount: provider.downloads.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return FileItem(file: provider.downloads[index]);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return CustomDivider();
-                      },
-                    );
-                  },
-                ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final downloadTabs = ref.watch(downloadTabsProvider);
+    final downloads = ref.watch(downloadProvider);
+    return downloads.when(data: (data) {
+      return DefaultTabController(
+        length: downloadTabs.length,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+            bottom: TabBar(
+              indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+              labelColor: Theme.of(context).colorScheme.primaryContainer,
+              unselectedLabelColor:
+                  Theme.of(context).textTheme.titleSmall!.color,
+              isScrollable: false,
+              tabs: Constants.map<Widget>(
+                downloadTabs,
+                (index, label) {
+                  return Tab(text: '$label');
+                },
               ),
             ),
           ),
-        );
-      },
-    );
+          body: Visibility(
+            visible: data.isNotEmpty,
+            replacement: const Center(child: Text('No Files Found')),
+            child: TabBarView(
+              children: Constants.map<Widget>(
+                downloadTabs,
+                (index, label) {
+                  return ListView.separated(
+                    padding: const EdgeInsets.only(left: 20),
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FileItem(file: data[index]);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const CustomDivider();
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+    }, error: (data, err) {
+      return Text("error occurred",
+          style: Theme.of(context).textTheme.titleLarge);
+    }, loading: () {
+      return const CustomLoader();
+    });
   }
 }

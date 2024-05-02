@@ -1,6 +1,7 @@
-import 'package:filex/screens/folder/folder.dart';
-import 'package:filex/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:filex/screens/folder.dart';
+import 'package:filex/utils/file_utils.dart';
+import 'package:filex/utils/navigate.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class StorageItem extends StatelessWidget {
@@ -12,7 +13,7 @@ class StorageItem extends StatelessWidget {
   final int usedSpace;
   final int totalSpace;
 
-  StorageItem({
+  const StorageItem({super.key, 
     required this.percent,
     required this.title,
     required this.path,
@@ -31,7 +32,7 @@ class StorageItem extends StatelessWidget {
           Folder(title: title, path: path),
         );
       },
-      contentPadding: EdgeInsets.only(right: 20),
+      contentPadding: const EdgeInsets.only(right: 20),
       leading: SizedBox(
         height: 40,
         width: 40,
@@ -67,11 +68,11 @@ class StorageItem extends StatelessWidget {
         ],
       ),
       subtitle: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: LinearPercentIndicator(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           percent: percent,
           progressColor: color,

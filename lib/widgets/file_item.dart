@@ -1,30 +1,32 @@
 import 'dart:io';
 
-import 'package:filex/utils/utils.dart';
-import 'package:filex/widgets/file_icon.dart';
-import 'package:filex/widgets/file_popup.dart';
+
 import 'package:flutter/material.dart';
+import 'package:filex/utils/file_utils.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
+
+import 'file_icon.dart';
+import 'file_popup.dart';
 
 class FileItem extends StatelessWidget {
   final String file;
   final Function? popTap;
 
-  FileItem({
-    Key? key,
+  const FileItem({
+    super.key,
     required this.file,
     this.popTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => OpenFilex.open(file),
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       leading: FileIcon(file: file),
       title: Text(
-        '${basename(file)}',
+        basename(file),
         style: TextStyle(
             fontSize: 14, color: Theme.of(context).textTheme.titleSmall!.color),
         maxLines: 2,

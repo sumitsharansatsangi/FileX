@@ -1,9 +1,13 @@
 import 'dart:io';
-
-import 'package:filex/utils/utils.dart';
-import 'package:filex/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:filex/providers/category_provider.dart';
+import 'package:filex/utils/consts.dart';
+import 'package:filex/utils/dialogs.dart';
+import 'package:filex/utils/extensions.dart';
+import 'package:filex/utils/file_utils.dart';
+import 'package:filex/utils/strings.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart';
@@ -12,19 +16,18 @@ class WhatsappStatus extends StatelessWidget {
   final String title;
   final String path;
   final List<FileSystemEntity> files;
-  WhatsappStatus({Key? key, required this.title, required this.path})
-      : files = Directory(path).listSync()..removeWhere((f) => f.isHidden),
-        super(key: key);
+  WhatsappStatus({super.key, required this.title, required this.path})
+      : files = Directory(path).listSync()..removeWhere((f) => f.isHidden);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('$title')),
+      appBar: AppBar(title: Text(title)),
       body: CustomScrollView(
         primary: false,
         slivers: <Widget>[
           SliverPadding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             sliver: SliverGrid.count(
               crossAxisSpacing: 5.0,
               mainAxisSpacing: 5.0,
@@ -37,8 +40,8 @@ class WhatsappStatus extends StatelessWidget {
                   File file = File(path);
                   String? mimeType = mime(path);
                   return mimeType == null
-                      ? SizedBox()
-                      : _WhatsAppItem(
+                      ? const SizedBox()
+                      : WhatsAppItem(
                           file: file,
                           path: path,
                           mimeType: mimeType,
@@ -53,12 +56,13 @@ class WhatsappStatus extends StatelessWidget {
   }
 }
 
-class _WhatsAppItem extends StatelessWidget {
+class WhatsAppItem extends StatelessWidget {
   final File file;
   final String path;
   final String mimeType;
 
-  _WhatsAppItem({
+  const WhatsAppItem({
+    super.key,
     required this.file,
     required this.path,
     required this.mimeType,
@@ -69,66 +73,83 @@ class _WhatsAppItem extends StatelessWidget {
     return InkWell(
       onTap: () => OpenFilex.open(file.path),
       child: GridTile(
-        header: Container(
+        header: SizedBox(
           height: 50.0,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black54, Colors.transparent],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black54, Colors.transparent],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
-          ),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () => saveMedia(),
-                    icon: Icon(
-                      Feather.download,
-                      color: Colors.white,
-                      size: 16.0,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () => saveMedia(context),
+                      icon: const Icon(
+                        Feather.download,
+                        color: Colors.white,
+                        size: 16.0,
+                      ),
                     ),
-                  ),
-                  mimeType.split('/')[0] == 'video'
-                      ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '${FileUtils.formatBytes(file.lengthSync(), 1)}',
-                              style: TextStyle(
-                                  fontSize: 12.0, color: Colors.white),
-                            ),
-                            SizedBox(width: 5.0),
-                            Icon(
-                              Icons.play_circle_filled,
+                    mimeType.split('/')[0] == 'video'
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                FileUtils.formatBytes(file.lengthSync(), 1),
+                                style: const TextStyle(
+                                    fontSize: 12.0, color: Colors.white),
+                              ),
+                              const SizedBox(width: 5.0),
+                              const Icon(
+                                Icons.play_circle_filled,
+                                color: Colors.white,
+                                size: 16.0,
+                              ),
+                            ],
+                          )
+                        : Text(
+                            FileUtils.formatBytes(file.lengthSync(), 1),
+                            style: const TextStyle(
+                              fontSize: 12.0,
                               color: Colors.white,
-                              size: 16.0,
                             ),
-                          ],
-                        )
-                      : Text(
-                          '${FileUtils.formatBytes(file.lengthSync(), 1)}',
-                          style: TextStyle(
-                            fontSize: 12.0,
-                            color: Colors.white,
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
         child: mimeType.split('/')[0] == 'video'
-            ? VideoThumbnail(path: path)
+            ? Consumer(
+                builder: (context, ref, child) {
+                  final thumbnail = ref.watch(getThumbnailProvider(path));
+                  return thumbnail.when(data: (t) {
+                    if(t!=null){
+                    return Image.memory(t);
+                    }else{
+                      return const Icon(Icons.error);
+                    }
+                  }, error: (a, b) {
+                    return const Text("Error");
+                  }, loading: () {
+                    return const CircularProgressIndicator();
+                  });
+                },
+              )
             : Image(
                 fit: BoxFit.cover,
                 errorBuilder: (b, o, c) {
-                  return Icon(Icons.image);
+                  return const Icon(Icons.image);
                 },
                 image: ResizeImage(
                   FileImage(File(file.path)),
@@ -140,12 +161,14 @@ class _WhatsAppItem extends StatelessWidget {
     );
   }
 
-  saveMedia() async {
+ Future<void> saveMedia(BuildContext context) async {
     String rootPath = '/storage/emulated/0/';
     await Directory('$rootPath${AppStrings.appName}').create();
     await Directory('$rootPath${AppStrings.appName}/Whatsapp Status').create();
     await file.copy(
         '$rootPath${AppStrings.appName}/Whatsapp Status/${basename(path)}');
-    Dialogs.showToast('Saved!');
+    if(context.mounted) {
+      Dialogs.showToast(Text( 'Saved!', style: Theme.of(context).textTheme.titleLarge, ));
+    }
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:cherry_toast/cherry_toast.dart';
-import 'package:filex/utils/utils.dart';
-import 'package:filex/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:filex/widgets/custom_alert.dart';
+
+import 'strings.dart';
 
 class Dialogs {
   static showExitDialog(BuildContext context) {
@@ -11,42 +11,36 @@ class Dialogs {
       context: context,
       builder: (context) => CustomAlert(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text(
                 AppStrings.appName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 25),
-              Text(
+              const SizedBox(height: 25),
+              const Text(
                 'Are you sure you want to quit?',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     height: 40,
                     width: 130,
                     child: OutlinedButton(
-                      child: Text(
-                        'No',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
                       onPressed: () => Navigator.pop(context),
                       style: ButtonStyle(
                         backgroundColor:
@@ -61,16 +55,18 @@ class Dialogs {
                               color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
+                      child: Text(
+                        'No',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 40,
                     width: 130,
                     child: ElevatedButton(
-                      child: Text(
-                        'Yes',
-                        style: TextStyle(color: Colors.white),
-                      ),
                       onPressed: () => exit(0),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
@@ -81,11 +77,15 @@ class Dialogs {
                           ),
                         ),
                       ),
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -93,9 +93,9 @@ class Dialogs {
     );
   }
 
-  static showToast(value) {
+  static showToast( Text text) {
     CherryToast.info(
-      title: value,
+      title:text,
     );
   }
 }

@@ -14,76 +14,69 @@ publish_to: none
 version: 1.0.3+3
 
 environment:
-  sdk: ">=3.3.3 <4.0.0"
+  sdk: ">=3.3.4 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
-  provider: ^6.1.2 
   flutter_icons:
     git: https://github.com/jibiel/flutter-icons.git
-  percent_indicator: ^4.2.2
-  mime_type: ^1.0.0
-  shared_preferences:
-    git: https://github.com/kumsumit/shared_preferences.git
-  device_info_plus:
-    git: https://github.com/kumsumit/device_info_plus.git
-  path: ^1.9.0
-#  thumbnails: ^1.0.1
-  path_provider:
-    git: https://github.com/kumsumit/path_provider.git
-  cherry_toast: ^1.10.0
-  permission_handler:
-    git: https://github.com/kumsumit/permission_handler.git
-  intl: ^0.19.0
-  open_filex: ^4.4.0
-  device_apps:
-    git: https://github.com/sumitsharansatsangi/flutter_plugin_device_apps.git
-  share_plus:
-    git: https://github.com/kumsumit/share_plus.git
-  video_player:
-    git: https://github.com/kumsumit/video_player.git  
   isolate_handler:
     git: https://github.com/sumitsharansatsangi/isolate_handler.git
-# dependency_overrides:
-  platform: ^3.1.4
-  file: ^7.0.0
+  path: ^1.9.0
+  mime_type: ^1.0.0
+  cherry_toast: ^1.10.0
+  intl: ^0.19.0
+  open_filex: ^4.4.0
+  path_provider:
+    git: https://github.com/kumsumit/path_provider.git
+  isar: ^3.1.0+1
+  isar_flutter_libs: 
+    git: https://github.com/kumsumit/isar_flutter_libs.git  
+  device_apps:
+    git: https://github.com/sumitsharansatsangi/flutter_plugin_device_apps.git
+  video_thumbnail:
+    git: https://github.com/kumsumit/video_thumbnail.git
+  cupertino_icons: ^1.0.6
+  flutter_riverpod: ^2.5.1
+  percent_indicator:
+    git: https://github.com/diegoveloper/flutter_percent_indicator.git
+  permission_handler:
+    git: https://github.com/kumsumit/permission_handler.git
+  riverpod_annotation: ^2.3.5
+  flutter_native_splash: ^2.4.0
+  share_plus:
+    git: https://github.com/kumsumit/share_plus.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+  isar_generator:
+    git: https://github.com/kumsumit/isar_generator.git
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.9
+  custom_lint: ^0.6.4
+  riverpod_lint: ^2.3.10
+  flutter_lints: ^3.0.2
 
-# The following section is specific to Flutter.
 flutter:
   uses-material-design: true
-  assets:
-    - assets/images/
+  
+flutter_native_splash:
+  color: "#129389"
+  color_dark: "#129389"
+  android: true
+  ios: true
+  image_android: android/app/src/main/ic_launcher-playstore.png
+  image_dark_android: android/app/src/main/ic_launcher-playstore.png
+  image_ios: android/app/src/main/ic_launcher-playstore.png
+  image_dark_ios: android/app/src/main/ic_launcher-playstore.png
+  android_gravity: center
+  ios_content_mode: center
+  android_12:
+    image: android/app/src/main/ic_launcher-playstore.png
+    image_dark: android/app/src/main/ic_launcher-playstore.png
+    color: "#129389"
+    color_dark: "#129389"
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+ 

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CustomAlert extends StatelessWidget {
   final Widget child;
 
-  CustomAlert({Key? key, required this.child}) : super(key: key);
+  CustomAlert({super.key, required this.child});
 
   late double deviceWidth;
   late double deviceHeight;
@@ -26,7 +26,7 @@ class CustomAlert extends StatelessWidget {
     dialogHeight = deviceHeight * (0.50);
 
     return MediaQuery(
-      data: MediaQueryData(),
+      data: const MediaQueryData(),
       child: GestureDetector(
 //        onTap: ()=>Navigator.pop(context),
         child: BackdropFilter(
@@ -49,7 +49,7 @@ class CustomAlert extends StatelessWidget {
                           onTap: () {},
                           child: Card(
                             color: Theme.of(context).colorScheme.tertiaryContainer,
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10.0),
                                 topRight: Radius.circular(10.0),
