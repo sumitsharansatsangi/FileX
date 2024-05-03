@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/core_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:filex/screens/folder.dart';
 import 'package:filex/utils/file_utils.dart';

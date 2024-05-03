@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
 import 'package:isolate_handler/isolate_handler.dart';
 import 'package:filex/models/model.dart';
@@ -13,8 +14,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:filex/utils/dialogs.dart';
 
-part 'category_provider.g.dart';
+part 'provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<Isar> isarInstance(IsarInstanceRef ref) async {
@@ -58,7 +60,7 @@ class ModelManager extends _$ModelManager {
   }
 
   Future<void> changeTheme(bool darkTheme) async {
-     state = state.copyWith(darkTheme: darkTheme);
+    state = state.copyWith(darkTheme: darkTheme);
     final isar = await ref.read(isarInstanceProvider.future);
     await isar.writeTxn(() async {
       await isar.models.put(state);
@@ -66,7 +68,7 @@ class ModelManager extends _$ModelManager {
   }
 
   Future<void> changeSort(int sort) async {
-     state= state.copyWith(sort: sort);
+    state = state.copyWith(sort: sort);
     final isar = await ref.read(isarInstanceProvider.future);
     await isar.writeTxn(() async {
       await isar.models.put(state);
@@ -74,14 +76,13 @@ class ModelManager extends _$ModelManager {
   }
 
   Future<void> changeHidden(bool hidden) async {
-     state = state.copyWith(hidden: hidden);
+    state = state.copyWith(hidden: hidden);
     final isar = await ref.read(isarInstanceProvider.future);
     await isar.writeTxn(() async {
       await isar.models.put(state);
     });
   }
 }
-
 
 @riverpod
 Future<List<FileSystemEntity>> searchFiles(
@@ -92,8 +93,8 @@ Future<List<FileSystemEntity>> searchFiles(
   List<FileSystemEntity> files = <FileSystemEntity>[];
   final model = ref.read(modelManagerProvider);
   for (Directory dir in storage) {
-    List fs = await FileUtils.getAllFilesInPath(dir.path,
-        showHidden: model.hidden);
+    List fs =
+        await FileUtils.getAllFilesInPath(dir.path, showHidden: model.hidden);
     for (FileSystemEntity fs in fs) {
       if (basename(fs.path).toLowerCase().contains(query.toLowerCase())) {
         files.add(fs);
@@ -174,14 +175,12 @@ class ImageTabs extends _$ImageTabs {
   }
 }
 
+@pragma('vm:entry-point')
 Future<void> getAllFilesWithIsolate(Map<String, dynamic> context) async {
   debugPrint(context.toString());
   String isolateName = context['name'];
   String isolateName2 = '${isolateName}_2';
-  debugPrint('Get files');
   List<FileSystemEntity> files = await FileUtils.getAllFiles(showHidden: false);
-  debugPrint('Files $files');
-  debugPrint(files.length.toString());
   final messenger = HandledIsolate.initialize(context);
   try {
     final SendPort? send = IsolateNameServer.lookupPortByName(isolateName2);
@@ -189,7 +188,6 @@ Future<void> getAllFilesWithIsolate(Map<String, dynamic> context) async {
   } catch (e) {
     debugPrint(e.toString());
   }
-  debugPrint("laddoo");
   messenger.send('done');
 }
 
@@ -243,9 +241,6 @@ class Audio extends _$Audio {
   void update(List<String> value) {
     state = value;
   }
-
-  
-
 }
 
 @riverpod
@@ -333,4 +328,158 @@ List<String> image(ImageRef ref, String type) {
     IsolateNameServer.removePortNameMapping(isolateName2);
   });
   return images;
+}
+
+@Riverpod(keepAlive: true)
+class Path extends _$Path {
+  @override
+  String build() => "";
+  void update(String path) {
+    state = path;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class Paths extends _$Paths {
+  @override
+  List<String> build() => <String>[];
+  void addNew(String path) {
+    state = [...state, path];
+  }
+
+  void removeLast() => state.removeLast();
+  void removeRange(index) {
+    state.removeRange(index + 1, ref.read(pathsProvider).length);
+  }
+}
+
+@Riverpod(keepAlive: true)
+class Files extends _$Files {
+  @override
+  List<FileSystemEntity> build() => <FileSystemEntity>[];
+
+  Future<void> getFiles() async {
+    try {
+      final model = ref.read(modelManagerProvider);
+      Directory dir = Directory(ref.read(pathProvider));
+      List<FileSystemEntity> dirFiles = dir.listSync();
+      state = [];
+      for (FileSystemEntity file in dirFiles) {
+        if (!model.hidden) {
+          if (!basename(file.path).startsWith('.')) {
+            state = [...state, file];
+          }
+        } else {
+          state = [...state, file];
+        }
+      }
+      state = FileUtils.sortList(state, model.sort);
+    } catch (e) {
+      if (e.toString().contains('Permission denied')) {
+        Dialogs.showToast('Permission Denied! cannot access this Directory!');
+        ref.read(pathsProvider.notifier).removeLast();
+        ref.read(pathProvider.notifier).update(ref.read(pathsProvider).last);
+        getFiles();
+      }
+    }
+  }
+}
+
+@riverpod
+List<FileSystemEntity> availableStorage(AvailableStorageRef ref) {
+  return <FileSystemEntity>[];
+}
+
+@riverpod
+class TotalSpace extends _$TotalSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+class UsedSpace extends _$UsedSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+class TotalSDSpace extends _$TotalSDSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+class UsedSDSpace extends _$UsedSDSpace {
+  @override
+  int build() => 0;
+  void assign(int val) => state = val;
+}
+
+@riverpod
+Future<void> checkSpace(CheckSpaceRef ref) async {
+  List<Directory>? dirList = await getExternalStorageDirectories();
+  if (dirList != null) {
+    ref.read(availableStorageProvider).clear();
+    ref.read(availableStorageProvider).addAll(dirList);
+    MethodChannel platform = const MethodChannel('com.kumpali.filex/storage');
+    final free = await platform.invokeMethod('getStorageFreeSpace');
+    final total = await platform.invokeMethod('getStorageTotalSpace');
+    ref.read(totalSpaceProvider.notifier).assign(total);
+    ref.read(usedSpaceProvider.notifier).assign(total - free);
+    if (dirList.length > 1) {
+      var freeSD = await platform.invokeMethod('getExternalStorageFreeSpace');
+      var totalSD = await platform.invokeMethod('getExternalStorageTotalSpace');
+      ref.read(usedSDSpaceProvider.notifier).assign(totalSD - freeSD);
+      ref.read(totalSDSpaceProvider.notifier).assign(totalSD);
+    }
+  }
+  final isolates = IsolateHandler();
+  String isolateName = 'recent';
+  String isolateName2 = '${isolateName}_2';
+  isolates.spawn<String>(
+    getRecentFilesWithIsolate,
+    name: isolateName,
+    onReceive: (val) {
+      debugPrint(val);
+      isolates.kill(isolateName);
+    },
+    onInitialized: () => isolates.send('hey', to: isolateName),
+  );
+  ReceivePort port = ReceivePort();
+  IsolateNameServer.registerPortWithName(port.sendPort, isolateName2);
+  port.listen((message) {
+    debugPrint('RECEIVED SERVER PORT in Recent Files');
+    ref.read(recentFileProvider).clear();
+    ref.read(recentFileProvider.notifier).update(message);
+    port.close();
+    IsolateNameServer.removePortNameMapping(isolateName2);
+  });
+}
+
+@riverpod
+class RecentFile extends _$RecentFile {
+  @override
+  List<String> build() {
+    return <String>[];
+  }
+
+  void update(List<String> value) {
+    state = value;
+  }
+}
+
+@pragma('vm:entry-point')
+Future<void> getRecentFilesWithIsolate(Map<String, dynamic> context) async {
+  debugPrint(context.toString());
+  String isolateName = context['name'];
+  String isolateName2 = '${isolateName}_2';
+  List<FileSystemEntity> files =
+      await FileUtils.getRecentFiles(showHidden: false);
+  final messenger = HandledIsolate.initialize(context);
+  final SendPort? send = IsolateNameServer.lookupPortByName(isolateName2);
+  send?.send([for (final f in files) f.path]);
+  messenger.send('done');
 }

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:filex/utils/consts.dart';
 import 'package:filex/widgets/custom_divider.dart';
 import 'package:filex/widgets/custom_loader.dart';

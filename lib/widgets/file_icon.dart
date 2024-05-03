@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,19 +53,19 @@ class FileIcon extends StatelessWidget {
                     return Image.memory(t);
                   } else {
                     return Image.asset(
-            'assets/video-placeholder.png',
-            height: 40,
-            width: 40,
-            fit: BoxFit.cover,
-          );
+                      'assets/video-placeholder.png',
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    );
                   }
                 }, error: (a, b) {
                   return Image.asset(
-            'assets/video-placeholder.png',
-            height: 40,
-            width: 40,
-            fit: BoxFit.cover,
-          );
+                    'assets/video-placeholder.png',
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                  );
                 }, loading: () {
                   return const Center(child: CircularProgressIndicator());
                 });

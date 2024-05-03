@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:filex/screens/about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -22,23 +22,24 @@ class Settings extends StatelessWidget {
           Consumer(
             builder: (context, ref, child) {
               final model = ref.watch(modelManagerProvider);
-                return SwitchListTile.adaptive(
-                  contentPadding: const EdgeInsets.all(0),
-                  secondary: const Icon(
-                    Feather.eye_off,
-                  ),
-                  title: Text(
-                    'See hidden files',
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.titleSmall!.color),
-                  ),
-                  value: model.hidden,
-                  onChanged: (value) async {
-                    await ref.read(modelManagerProvider.notifier).changeHidden(value);
-                  },
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                );
-            
+              return SwitchListTile.adaptive(
+                contentPadding: const EdgeInsets.all(0),
+                secondary: const Icon(
+                  Feather.eye_off,
+                ),
+                title: Text(
+                  'See hidden files',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.titleSmall!.color),
+                ),
+                value: model.hidden,
+                onChanged: (value) async {
+                  await ref
+                      .read(modelManagerProvider.notifier)
+                      .changeHidden(value);
+                },
+                activeColor: Theme.of(context).colorScheme.secondary,
+              );
             },
           ),
           const CustomDivider(),
@@ -46,26 +47,28 @@ class Settings extends StatelessWidget {
             builder: (context, ref, child) {
               final model = ref.watch(modelManagerProvider);
               final themeMode = ref.read(themeModeManagerProvider.notifier);
-          
-                return SwitchListTile.adaptive(
-                  contentPadding: const EdgeInsets.all(0),
-                  secondary: const Icon(Icons.light_mode),
-                  title: Text(
-                    "Dark Mode",
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.titleSmall!.color),
-                  ),
-                  onChanged: (val) async {
-                    if (val) {
-                      themeMode.toggleDark();
-                    } else {
-                      themeMode.toggleLight();
-                    }
-                    await ref.read(modelManagerProvider.notifier).changeTheme(val);
-                  },
-                  value: model.darkTheme,
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                );
+
+              return SwitchListTile.adaptive(
+                contentPadding: const EdgeInsets.all(0),
+                secondary: const Icon(Icons.light_mode),
+                title: Text(
+                  "Dark Mode",
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.titleSmall!.color),
+                ),
+                onChanged: (val) async {
+                  if (val) {
+                    themeMode.toggleDark();
+                  } else {
+                    themeMode.toggleLight();
+                  }
+                  await ref
+                      .read(modelManagerProvider.notifier)
+                      .changeTheme(val);
+                },
+                value: model.darkTheme,
+                activeColor: Theme.of(context).colorScheme.secondary,
+              );
             },
           ),
           const CustomDivider(),

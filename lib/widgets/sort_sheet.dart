@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:filex/utils/consts.dart';
 
 class SortSheet extends StatelessWidget {
@@ -35,35 +35,33 @@ class SortSheet extends StatelessWidget {
                   return Consumer(
                     builder: (context, ref, child) {
                       final model = ref.watch(modelManagerProvider);
-                        return ListTile(
-                          onTap: () async {
-                            await ref.read(modelManagerProvider.notifier).changeSort(index);
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          },
-                          contentPadding: const EdgeInsets.all(0),
-                          trailing: index == model.sort
-                              ? const Icon(
-                                  Feather.check,
-                                  color: Colors.teal,
-                                  size: 16,
-                                )
-                              : const SizedBox(),
-                          title: Text(
-                            '${Constants.sortList[index]}',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: index == model.sort
-                                  ? Colors.teal
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .color,
-                            ),
+                      return ListTile(
+                        onTap: () async {
+                          await ref
+                              .read(modelManagerProvider.notifier)
+                              .changeSort(index);
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        contentPadding: const EdgeInsets.all(0),
+                        trailing: index == model.sort
+                            ? const Icon(
+                                Feather.check,
+                                color: Colors.teal,
+                                size: 16,
+                              )
+                            : const SizedBox(),
+                        title: Text(
+                          '${Constants.sortList[index]}',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: index == model.sort
+                                ? Colors.teal
+                                : Theme.of(context).textTheme.titleLarge!.color,
                           ),
-                        );
-                   
+                        ),
+                      );
                     },
                   );
                 },

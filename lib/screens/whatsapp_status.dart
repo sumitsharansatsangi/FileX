@@ -3,7 +3,7 @@ import 'package:filex/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:filex/utils/consts.dart';
 import 'package:filex/utils/dialogs.dart';
 import 'package:filex/utils/extensions.dart';
@@ -139,19 +139,19 @@ class WhatsAppItem extends StatelessWidget {
                       return Image.memory(t);
                     } else {
                       return Image.asset(
-            'assets/video-placeholder.png',
-            height: 40,
-            width: 40,
-            fit: BoxFit.cover,
-          );
+                        'assets/video-placeholder.png',
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.cover,
+                      );
                     }
                   }, error: (a, b) {
                     return Image.asset(
-            'assets/video-placeholder.png',
-            height: 40,
-            width: 40,
-            fit: BoxFit.cover,
-          );
+                      'assets/video-placeholder.png',
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    );
                   }, loading: () {
                     return const CustomLoader();
                   });
@@ -178,6 +178,6 @@ class WhatsAppItem extends StatelessWidget {
     await Directory('$rootPath${AppStrings.appName}/Whatsapp Status').create();
     await file.copy(
         '$rootPath${AppStrings.appName}/Whatsapp Status/${basename(path)}');
-      Dialogs.showToast('Saved!');
+    Dialogs.showToast('Saved!');
   }
 }

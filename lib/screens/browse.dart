@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/core_provider.dart';
 import 'package:filex/screens/apps_screen.dart';
 import 'package:filex/screens/non_visible_media.dart';
 import 'package:filex/screens/downloads.dart';
@@ -46,10 +45,12 @@ class Browse extends StatelessWidget {
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          ref.watch(checkSpaceAndRecentFilesProvider.future);
+          ref.watch(checkSpaceProvider.future);
           return RefreshIndicator(
-            onRefresh: () =>
-                ref.refresh(checkSpaceAndRecentFilesProvider.future),
+            onRefresh: () {
+              ref.read(recentFileProvider);
+              return ref.refresh(checkSpaceProvider.future);
+            },
             child: ListView(
               padding: const EdgeInsets.only(left: 20.0),
               children: <Widget>[
@@ -159,18 +160,22 @@ class _CategoriesSection extends StatelessWidget {
                         context, Downloads(title: '${category['title']}'));
                     break;
                   case 1:
-                    Navigate.pushPage(context, VisibleMedia(title: '${category['title']}'));
+                    Navigate.pushPage(
+                        context, VisibleMedia(title: '${category['title']}'));
                     break;
                   case 2:
-                    Navigate.pushPage(context, VisibleMedia(title: '${category['title']}'));
+                    Navigate.pushPage(
+                        context, VisibleMedia(title: '${category['title']}'));
                     break;
                   case 3:
                     ref.read(getAudioProvider('audio'));
-                    Navigate.pushPage(context, NonVisibleMedia(title: category['title']));
+                    Navigate.pushPage(
+                        context, NonVisibleMedia(title: category['title']));
                     break;
                   case 4:
                     ref.read(getAudioProvider('text'));
-                    Navigate.pushPage( context, NonVisibleMedia(title: category['title']));
+                    Navigate.pushPage(
+                        context, NonVisibleMedia(title: category['title']));
                     break;
                   case 5:
                     Navigate.pushPage(context, const AppScreen());

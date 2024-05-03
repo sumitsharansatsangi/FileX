@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:filex/providers/core_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,10 +28,10 @@ class Folder extends ConsumerWidget {
     final files = ref.watch(filesProvider);
     final paths = ref.watch(pathsProvider);
     final path = ref.watch(pathProvider);
-    if(files.isEmpty){
+    if (files.isEmpty) {
       return Image.asset("assets/no_files_found.png");
     }
-    
+
     return WillPopScope(
       onWillPop: () async {
         if (paths.length == 1) {

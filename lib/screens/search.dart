@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'package:filex/providers/core_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
+import 'package:filex/providers/provider.dart';
 import 'package:filex/screens/folder.dart';
 import 'package:filex/utils/navigate.dart';
 import 'package:filex/widgets/custom_divider.dart';
