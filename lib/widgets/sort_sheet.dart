@@ -34,20 +34,19 @@ class SortSheet extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Consumer(
                     builder: (context, ref, child) {
-                      final modelManager = ref.watch(modelManagerProvider);
-                     return  modelManager.when(data: (data) {
+                      final model = ref.watch(modelManagerProvider);
                         return ListTile(
                           onTap: () async {
-                            await data.changeSort(index);
+                            await ref.read(modelManagerProvider.notifier).changeSort(index);
                             if (context.mounted) {
                               Navigator.pop(context);
                             }
                           },
                           contentPadding: const EdgeInsets.all(0),
-                          trailing: index == data.model.sort
+                          trailing: index == model.sort
                               ? const Icon(
                                   Feather.check,
-                                  color: Colors.blue,
+                                  color: Colors.teal,
                                   size: 16,
                                 )
                               : const SizedBox(),
@@ -55,9 +54,8 @@ class SortSheet extends StatelessWidget {
                             '${Constants.sortList[index]}',
                             style: TextStyle(
                               fontSize: 14.0,
-                              color: index ==
-                                     data.model.sort
-                                  ? Colors.blue
+                              color: index == model.sort
+                                  ? Colors.teal
                                   : Theme.of(context)
                                       .textTheme
                                       .titleLarge!
@@ -65,11 +63,7 @@ class SortSheet extends StatelessWidget {
                             ),
                           ),
                         );
-                      }, error: (data, err) {
-                        return const Text("Errror");
-                      }, loading: () {
-                        return const CircularProgressIndicator();
-                      });
+                   
                     },
                   );
                 },

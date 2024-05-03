@@ -55,8 +55,8 @@ class RenameFileDialogState extends State<RenameFileDialog> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.secondaryContainer),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondaryContainer),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -70,58 +70,64 @@ class RenameFileDialogState extends State<RenameFileDialog> {
                       child: Text(
                         'Cancel',
                         style: TextStyle(
-                          color:Theme.of(context).colorScheme.secondary,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 5,),
+                const SizedBox(
+                  width: 5,
+                ),
                 Expanded(
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {
                         if (name.text.isNotEmpty) {
                           if (widget.type == 'file') {
-                            if (!File('${widget.path.replaceAll(
-                                        pathlib.basename(widget.path), '')}${name.text}')
+                            if (!File(
+                                    '${widget.path.replaceAll(pathlib.basename(widget.path), '')}${name.text}')
                                 .existsSync()) {
                               await File(widget.path)
-                                  .rename('${widget.path.replaceAll(
-                                          pathlib.basename(widget.path), '')}${name.text}')
+                                  .rename(
+                                      '${widget.path.replaceAll(pathlib.basename(widget.path), '')}${name.text}')
                                   .catchError((e) {
                                 debugPrint(e.toString());
-                                if (e.toString().contains('Permission denied')) {
+                                if (e
+                                    .toString()
+                                    .contains('Permission denied')) {
                                   Dialogs.showToast(
-                                     Text( 'Cannot write to this device!', style: Theme.of(context).textTheme.titleLarge, ));
+                                      'Cannot write to this device!');
                                 }
                                 return File("");
                               });
                             } else {
                               Dialogs.showToast(
-                                 Text('A File with that name already exists!', style: Theme.of(context).textTheme.titleLarge,));
+                                  'A File with that name already exists!');
                             }
                           } else {
-                            if (Directory('${widget.path.replaceAll(
-                                        pathlib.basename(widget.path), '')}${name.text}')
+                            if (Directory(
+                                    '${widget.path.replaceAll(pathlib.basename(widget.path), '')}${name.text}')
                                 .existsSync()) {
                               Dialogs.showToast(
-                                 Text('A Folder with that name already exists!', style: Theme.of(context).textTheme.titleLarge,));
+                                  'A Folder with that name already exists!');
                             } else {
                               await Directory(widget.path)
-                                  .rename('${widget.path.replaceAll(
-                                          pathlib.basename(widget.path), '')}${name.text}')
+                                  .rename(
+                                      '${widget.path.replaceAll(pathlib.basename(widget.path), '')}${name.text}')
                                   .catchError((e) {
                                 debugPrint(e.toString());
-                                if (e.toString().contains('Permission denied')) {
+                                if (e
+                                    .toString()
+                                    .contains('Permission denied')) {
                                   Dialogs.showToast(
-                                      Text('Cannot write to this device!', style: Theme.of(context).textTheme.titleLarge,));
+                                      'Cannot write to this device!');
                                 }
                                 return Directory("");
                               });
                             }
                           }
-                          if(context.mounted) {
+                          if (context.mounted) {
                             Navigator.pop(context);
                           }
                         }
@@ -137,7 +143,10 @@ class RenameFileDialogState extends State<RenameFileDialog> {
                       ),
                       child: Text(
                         'Rename',
-                        style: TextStyle(color: Theme.of(context).colorScheme.secondaryContainer),
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer),
                       ),
                     ),
                   ),

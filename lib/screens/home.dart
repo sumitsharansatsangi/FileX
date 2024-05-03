@@ -25,18 +25,20 @@ class HomeScreenState extends State<Home> {
   Widget build(BuildContext context) {
     if (_notPermission) {
       return Scaffold(
-        backgroundColor:const Color.fromARGB(200, 18,147,137),
+          backgroundColor: const Color.fromARGB(200, 18, 147, 137),
           body: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                          'Permission not granted',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                 ElevatedButton(onPressed: requestPermission, child: const Text("Grant Permission"))
-                ],
-              )));
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Permission not granted',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              ElevatedButton(
+                  onPressed: requestPermission,
+                  child: const Text("Grant Permission"))
+            ],
+          )));
     } else {
       return WillPopScope(
         onWillPop: () => Dialogs.showExitDialog(context),
@@ -77,33 +79,32 @@ class HomeScreenState extends State<Home> {
   Future<void> checkPermission() async {
     PermissionStatus status = await Permission.storage.status;
     if (!status.isGranted) {
-        await requestPermission();
+      await requestPermission();
     } else {
-        FlutterNativeSplash.remove();
-        setState(() {
-          _notPermission=false;
-        });
+      FlutterNativeSplash.remove();
+      setState(() {
+        _notPermission = false;
+      });
     }
   }
 
-  Future<void> requestPermission()async {
-     PermissionStatus status = await Permission.storage.request();
-          FlutterNativeSplash.remove();
-          if(status.isGranted){
-            setState(() {
-              _notPermission=false;
-            });
-          }
-          else if(status.isPermanentlyDenied){
-            await openAppSettings();
-            await checkPermission();
-          }
+  Future<void> requestPermission() async {
+    PermissionStatus status = await Permission.storage.request();
+    FlutterNativeSplash.remove();
+    if (status.isGranted) {
+      setState(() {
+        _notPermission = false;
+      });
+    } else if (status.isPermanentlyDenied) {
+      await openAppSettings();
+      await checkPermission();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-   checkPermission();
+    checkPermission();
     _pageController = PageController(initialPage: 0);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,

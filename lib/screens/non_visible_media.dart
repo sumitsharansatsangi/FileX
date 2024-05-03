@@ -5,24 +5,21 @@ import 'package:filex/utils/consts.dart';
 import 'package:filex/widgets/custom_divider.dart';
 import 'package:filex/widgets/file_item.dart';
 
-class Category extends ConsumerWidget {
+class NonVisibleMedia extends ConsumerWidget {
   final String title;
 
-  const Category({
+  const NonVisibleMedia({
     super.key,
     required this.title,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(getAudioProvider(title.toLowerCase()));
     final audioTabs = ref.watch(audioTabsProvider);
     final audios = ref.watch(audioProvider);
-
     if (audios.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-
     return DefaultTabController(
       length: audioTabs.length,
       child: Scaffold(

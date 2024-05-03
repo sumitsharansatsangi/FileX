@@ -93,9 +93,12 @@ class Dialogs {
     );
   }
 
-  static showToast( Text text) {
+  static showToast(String text) {
     CherryToast.info(
-      title:text,
+      title: Text(
+        text,
+        style: TextStyle(color: Colors.teal.shade50),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:filex/providers/core_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:filex/providers/category_provider.dart';
 import 'package:filex/screens/folder.dart';
@@ -80,9 +81,12 @@ class Search extends SearchDelegate {
                     popTap: null,
                     file: file,
                     tap: () {
+                      ref.read(pathsProvider.notifier).addNew(file.path);
+                      ref.read(pathProvider.notifier).update(file.path);
+                      ref.read(filesProvider.notifier).getFiles();
                       Navigate.pushPage(
                         context,
-                        Folder(title: 'Storage', path: file.path),
+                        const Folder(title: 'Storage'),
                       );
                     },
                   );
@@ -126,9 +130,11 @@ class Search extends SearchDelegate {
                     popTap: null,
                     file: file,
                     tap: () {
+                      ref.read(pathsProvider.notifier).addNew(file.path);
+                      ref.read(pathProvider.notifier).update(file.path);
                       Navigate.pushPage(
                         context,
-                        Folder(title: 'Storage', path: file.path),
+                        const Folder(title: 'Storage'),
                       );
                     },
                   );

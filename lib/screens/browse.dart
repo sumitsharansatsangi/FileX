@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:filex/providers/category_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:filex/providers/core_provider.dart';
 import 'package:filex/screens/apps_screen.dart';
-import 'package:filex/screens/audio.dart';
+import 'package:filex/screens/non_visible_media.dart';
 import 'package:filex/screens/downloads.dart';
-import 'package:filex/screens/image.dart';
+import 'package:filex/screens/visible_media.dart';
 import 'package:filex/screens/search.dart';
 import 'package:filex/screens/whatsapp_status.dart';
 import 'package:flutter/material.dart';
@@ -148,60 +149,75 @@ class _CategoriesSection extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         Map category = Constants.categories[index];
 
-        return ListTile(
-          onTap: () {
-            if (index == Constants.categories.length - 1) {
-              // Check if the user has whatsapp installed
-              if (Directory(FileUtils.waPath1).existsSync()) {
-                Navigate.pushPage(
-                  context,
-                  WhatsappStatus(
-                      title: category['title'], path: FileUtils.waPath1),
-                );
-              } else if (Directory(FileUtils.waPath2).existsSync()) {
-                Navigate.pushPage(
-                  context,
-                  WhatsappStatus(
-                      title: category['title'], path: FileUtils.waPath2),
-                );
-              } else {
-                Dialogs.showToast(
-                   Text('Please Install WhatsApp to use this feature',style: Theme.of(context).textTheme.titleLarge,));
-              }
-            } else if (index == 0) {
-              Navigate.pushPage(
-                  context, Downloads(title: '${category['title']}'));
-            } else if (index == 5) {
-              Navigate.pushPage(context, const AppScreen());
-            } else {
-              Navigate.pushPage(
-                context,
-                index == 1 || index == 2
-                    ? Images(title: '${category['title']}')
-                    : Category(title: '${category['title']}'),
-              );
-            }
-          },
-          contentPadding: const EdgeInsets.all(0),
-          leading: SizedBox(
-            height: 40,
-            width: 40,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  width: 2,
+        return Consumer(
+          builder: (context, ref, child) {
+            return ListTile(
+              onTap: () {
+                switch (index) {
+                  case 0:
+                    Navigate.pushPage(
+                        context, Downloads(title: '${category['title']}'));
+                    break;
+                  case 1:
+                    Navigate.pushPage(context, VisibleMedia(title: '${category['title']}'));
+                    break;
+                  case 2:
+                    Navigate.pushPage(context, VisibleMedia(title: '${category['title']}'));
+                    break;
+                  case 3:
+                    ref.read(getAudioProvider('audio'));
+                    Navigate.pushPage(context, NonVisibleMedia(title: category['title']));
+                    break;
+                  case 4:
+                    ref.read(getAudioProvider('text'));
+                    Navigate.pushPage( context, NonVisibleMedia(title: category['title']));
+                    break;
+                  case 5:
+                    Navigate.pushPage(context, const AppScreen());
+                    break;
+                  case 6:
+                    if (Directory(FileUtils.waPath1).existsSync()) {
+                      Navigate.pushPage(
+                        context,
+                        WhatsappStatus(
+                            title: category['title'], path: FileUtils.waPath1),
+                      );
+                    } else if (Directory(FileUtils.waPath2).existsSync()) {
+                      Navigate.pushPage(
+                        context,
+                        WhatsappStatus(
+                            title: category['title'], path: FileUtils.waPath2),
+                      );
+                    } else {
+                      Dialogs.showToast(
+                          'Please Install WhatsApp to use this feature');
+                    }
+                    break;
+                }
+              },
+              contentPadding: const EdgeInsets.all(0),
+              leading: SizedBox(
+                height: 40,
+                width: 40,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      width: 2,
+                    ),
+                  ),
+                  child: Icon(category['icon'],
+                      size: 18, color: category['color']),
                 ),
               ),
-              child: Icon(category['icon'], size: 18, color: category['color']),
-            ),
-          ),
-          title: Text(
-            '${category['title']}',
-            style:
-                TextStyle(color: Theme.of(context).textTheme.titleLarge!.color),
-          ),
+              title: Text(
+                '${category['title']}',
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.titleLarge!.color),
+              ),
+            );
+          },
         );
       },
       separatorBuilder: (BuildContext context, int index) {

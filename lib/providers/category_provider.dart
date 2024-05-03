@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:isolate_handler/isolate_handler.dart';
-import 'package:filex/managers/model_manager.dart';
 import 'package:filex/models/model.dart';
 import 'package:filex/utils/file_utils.dart';
 import 'package:mime_type/mime_type.dart';
@@ -39,18 +38,50 @@ class ThemeModeManager extends _$ThemeModeManager {
   }
 }
 
-@riverpod
-Future<ModelManager> modelManager(ModelManagerRef ref) async {
-  final isar = await ref.read(isarInstanceProvider.future);
-  final model = await isar.models.get(1);
+@Riverpod(keepAlive: true)
+class ModelManager extends _$ModelManager {
+  @override
+  Model build() {
+    readDatabase();
+    return Model()
+      ..darkTheme = true
+      ..hidden = false
+      ..sort = 0;
+  }
 
-  return ModelManager(
-      isar,
-      model ?? Model()
-        ..darkTheme = true
-        ..hidden = false
-        ..sort = 0);
+  Future<void> readDatabase() async {
+    final isar = await ref.read(isarInstanceProvider.future);
+    final model = await isar.models.get(1);
+    if (model != null) {
+      state = model;
+    }
+  }
+
+  Future<void> changeTheme(bool darkTheme) async {
+     state = state.copyWith(darkTheme: darkTheme);
+    final isar = await ref.read(isarInstanceProvider.future);
+    await isar.writeTxn(() async {
+      await isar.models.put(state);
+    });
+  }
+
+  Future<void> changeSort(int sort) async {
+     state= state.copyWith(sort: sort);
+    final isar = await ref.read(isarInstanceProvider.future);
+    await isar.writeTxn(() async {
+      await isar.models.put(state);
+    });
+  }
+
+  Future<void> changeHidden(bool hidden) async {
+     state = state.copyWith(hidden: hidden);
+    final isar = await ref.read(isarInstanceProvider.future);
+    await isar.writeTxn(() async {
+      await isar.models.put(state);
+    });
+  }
 }
+
 
 @riverpod
 Future<List<FileSystemEntity>> searchFiles(
@@ -59,10 +90,10 @@ Future<List<FileSystemEntity>> searchFiles(
 ) async {
   List<Directory> storage = await FileUtils.getStorageList();
   List<FileSystemEntity> files = <FileSystemEntity>[];
-  final model = await ref.read(modelManagerProvider.future);
+  final model = ref.read(modelManagerProvider);
   for (Directory dir in storage) {
     List fs = await FileUtils.getAllFilesInPath(dir.path,
-        showHidden: model.model.hidden);
+        showHidden: model.hidden);
     for (FileSystemEntity fs in fs) {
       if (basename(fs.path).toLowerCase().contains(query.toLowerCase())) {
         files.add(fs);
@@ -212,8 +243,10 @@ class Audio extends _$Audio {
   void update(List<String> value) {
     state = value;
   }
-}
 
+  
+
+}
 
 @riverpod
 void getAudio(GetAudioRef ref, String type) {

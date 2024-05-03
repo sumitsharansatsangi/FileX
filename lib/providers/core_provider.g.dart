@@ -113,5 +113,47 @@ final usedSDSpaceProvider =
 );
 
 typedef _$UsedSDSpace = AutoDisposeNotifier<int>;
+String _$pathHash() => r'6c93fd64997ba2f563058c651f9f53a3969550b6';
+
+/// See also [Path].
+@ProviderFor(Path)
+final pathProvider = NotifierProvider<Path, String>.internal(
+  Path.new,
+  name: r'pathProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$pathHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Path = Notifier<String>;
+String _$pathsHash() => r'04055c35dca03605e89f765fc7f41c4b9a68946d';
+
+/// See also [Paths].
+@ProviderFor(Paths)
+final pathsProvider = NotifierProvider<Paths, List<String>>.internal(
+  Paths.new,
+  name: r'pathsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$pathsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Paths = Notifier<List<String>>;
+String _$filesHash() => r'c2bd6fb8f8b4b73e3f7f1f408dcb3c3ba96e308e';
+
+/// See also [Files].
+@ProviderFor(Files)
+final filesProvider = NotifierProvider<Files, List<FileSystemEntity>>.internal(
+  Files.new,
+  name: r'filesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$filesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Files = Notifier<List<FileSystemEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

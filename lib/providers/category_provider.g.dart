@@ -20,21 +20,7 @@ final isarInstanceProvider = FutureProvider<Isar>.internal(
 );
 
 typedef IsarInstanceRef = FutureProviderRef<Isar>;
-String _$modelManagerHash() => r'7088f5e8c595bf816be7fd9cf1080b3ef2de538a';
-
-/// See also [modelManager].
-@ProviderFor(modelManager)
-final modelManagerProvider = AutoDisposeFutureProvider<ModelManager>.internal(
-  modelManager,
-  name: r'modelManagerProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$modelManagerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef ModelManagerRef = AutoDisposeFutureProviderRef<ModelManager>;
-String _$searchFilesHash() => r'5a61799471f77d69b478fef4870824a7e2eba257';
+String _$searchFilesHash() => r'8856381dd0a302bedcab675db1233f66728aae4a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -597,6 +583,20 @@ final themeModeManagerProvider =
 );
 
 typedef _$ThemeModeManager = Notifier<ThemeMode>;
+String _$modelManagerHash() => r'94ddb79d8702cbb115845cafe4db01930fda061a';
+
+/// See also [ModelManager].
+@ProviderFor(ModelManager)
+final modelManagerProvider = NotifierProvider<ModelManager, Model>.internal(
+  ModelManager.new,
+  name: r'modelManagerProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$modelManagerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ModelManager = Notifier<Model>;
 String _$downloadTabsHash() => r'9eb2e3c63a37288399e00e5c2d438849e1f9a854';
 
 /// See also [DownloadTabs].

@@ -22,7 +22,6 @@ class Settings extends StatelessWidget {
           Consumer(
             builder: (context, ref, child) {
               final model = ref.watch(modelManagerProvider);
-              return model.when(data: (data) {
                 return SwitchListTile.adaptive(
                   contentPadding: const EdgeInsets.all(0),
                   secondary: const Icon(
@@ -33,43 +32,21 @@ class Settings extends StatelessWidget {
                     style: TextStyle(
                         color: Theme.of(context).textTheme.titleSmall!.color),
                   ),
-                  value: data.model.hidden,
+                  value: model.hidden,
                   onChanged: (value) async {
-                    await data.changeHidden(value);
+                    await ref.read(modelManagerProvider.notifier).changeHidden(value);
                   },
                   activeColor: Theme.of(context).colorScheme.secondary,
                 );
-              }, error: (data, err) {
-                return const Text("error");
-              }, loading: () {
-                return const CircularProgressIndicator();
-              });
+            
             },
           ),
-        const CustomDivider(),
-          Consumer(builder: (context, ref, child) {
-            final model = ref.watch(modelManagerProvider);
-            return model.when(data: (data) {
-              return Text(
-                data.model.darkTheme.toString(),
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.titleSmall!.color),
-              );
-            }, error: (datat, err) {
-              return Text(
-                "error",
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.titleSmall!.color),
-              );
-            }, loading: () {
-              return const CircularProgressIndicator();
-            });
-          }),
+          const CustomDivider(),
           Consumer(
             builder: (context, ref, child) {
               final model = ref.watch(modelManagerProvider);
               final themeMode = ref.read(themeModeManagerProvider.notifier);
-              return model.when(data: (data) {
+          
                 return SwitchListTile.adaptive(
                   contentPadding: const EdgeInsets.all(0),
                   secondary: const Icon(Icons.light_mode),
@@ -79,24 +56,19 @@ class Settings extends StatelessWidget {
                         color: Theme.of(context).textTheme.titleSmall!.color),
                   ),
                   onChanged: (val) async {
-                    if(val){
+                    if (val) {
                       themeMode.toggleDark();
-                    }else{
+                    } else {
                       themeMode.toggleLight();
                     }
-                    await data.changeTheme(val);
+                    await ref.read(modelManagerProvider.notifier).changeTheme(val);
                   },
-                  value: data.model.darkTheme,
+                  value: model.darkTheme,
                   activeColor: Theme.of(context).colorScheme.secondary,
                 );
-              }, error: (data, err) {
-                return const Text("error");
-              }, loading: () {
-                return const CircularProgressIndicator();
-              });
             },
           ),
-        const CustomDivider(),
+          const CustomDivider(),
           ListTile(
             contentPadding: const EdgeInsets.all(0),
             onTap: () => showLicensePage(context: context),
@@ -107,7 +79,7 @@ class Settings extends StatelessWidget {
                   color: Theme.of(context).textTheme.titleSmall!.color),
             ),
           ),
-        const CustomDivider(),
+          const CustomDivider(),
           ListTile(
             contentPadding: const EdgeInsets.all(0),
             onTap: () => Navigate.pushPage(context, const About()),

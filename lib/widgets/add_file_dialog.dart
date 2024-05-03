@@ -61,7 +61,6 @@ class AddFileDialog extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -73,15 +72,15 @@ class AddFileDialog extends StatelessWidget {
                               debugPrint(e.toString());
                               if (e.toString().contains('Permission denied')) {
                                 Dialogs.showToast(
-                                   Text( 'Cannot write to this Storage  device!', style: Theme.of(context).textTheme.titleLarge,));
+                                    'Cannot write to this Storage  device!');
                               }
                               return Directory("");
                             });
                           } else {
                             Dialogs.showToast(
-                               Text( 'A Folder with that name already exists!', style: Theme.of(context).textTheme.titleLarge,));
+                                'A Folder with that name already exists!');
                           }
-                          if(context.mounted) {
+                          if (context.mounted) {
                             Navigator.pop(context);
                           }
                         }

@@ -2,20 +2,22 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:filex/providers/category_provider.dart';
+import 'package:filex/utils/dialogs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:isolate_handler/isolate_handler.dart';
 import 'package:filex/utils/file_utils.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'core_provider.g.dart';
 
-
 @riverpod
- List<FileSystemEntity> availableStorage( AvailableStorageRef ref ){
-    return <FileSystemEntity>[];
- }
+List<FileSystemEntity> availableStorage(AvailableStorageRef ref) {
+  return <FileSystemEntity>[];
+}
 
 @riverpod
 class RecentFile extends _$RecentFile {
@@ -35,7 +37,6 @@ class TotalSpace extends _$TotalSpace {
   int build() => 0;
   void assign(int val) => state = val;
 }
-
 
 @riverpod
 class UsedSpace extends _$UsedSpace {
@@ -59,8 +60,7 @@ class UsedSDSpace extends _$UsedSDSpace {
 }
 
 @riverpod
-Future<void> checkSpaceAndRecentFiles(
-    CheckSpaceAndRecentFilesRef ref) async {
+Future<void> checkSpaceAndRecentFiles(CheckSpaceAndRecentFilesRef ref) async {
   List<Directory>? dirList = await getExternalStorageDirectories();
   if (dirList != null) {
     ref.read(availableStorageProvider).clear();
@@ -69,11 +69,11 @@ Future<void> checkSpaceAndRecentFiles(
     final free = await platform.invokeMethod('getStorageFreeSpace');
     final total = await platform.invokeMethod('getStorageTotalSpace');
     ref.read(totalSpaceProvider.notifier).assign(total);
-    ref.read(usedSpaceProvider.notifier).assign(total-free);
+    ref.read(usedSpaceProvider.notifier).assign(total - free);
     if (dirList.length > 1) {
       var freeSD = await platform.invokeMethod('getExternalStorageFreeSpace');
       var totalSD = await platform.invokeMethod('getExternalStorageTotalSpace');
-      ref.read(usedSDSpaceProvider.notifier).assign(totalSD-freeSD);
+      ref.read(usedSDSpaceProvider.notifier).assign(totalSD - freeSD);
       ref.read(totalSDSpaceProvider.notifier).assign(totalSD);
     }
     final isolates = IsolateHandler();
@@ -92,8 +92,8 @@ Future<void> checkSpaceAndRecentFiles(
     IsolateNameServer.registerPortWithName(port.sendPort, isolateName2);
     port.listen((message) {
       debugPrint('RECEIVED SERVER PORT');
-        ref.read(recentFileProvider).clear();    
-     ref.read(recentFileProvider.notifier).update(message);
+      ref.read(recentFileProvider).clear();
+      ref.read(recentFileProvider.notifier).update(message);
       port.close();
       IsolateNameServer.removePortNameMapping(isolateName2);
     });
@@ -110,4 +110,59 @@ Future<void> getFilesWithIsolate(Map<String, dynamic> context) async {
   final SendPort? send = IsolateNameServer.lookupPortByName(isolateName2);
   send?.send([for (final f in files) f.path]);
   messenger.send('done');
+}
+
+@Riverpod(keepAlive:true)
+class Path extends _$Path {
+  @override
+  String build() => "";
+  void update(String path) {
+    state = path;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class Paths extends _$Paths {
+  @override
+  List<String> build() => <String>[];
+  void addNew(String path) {
+    state = [...state, path];
+  }
+
+  void removeLast() => state.removeLast();
+  void removeRange(index) {
+    state.removeRange(index + 1, ref.read(pathsProvider).length);
+  }
+}
+
+@Riverpod(keepAlive: true)
+class Files extends _$Files {
+  @override
+  List<FileSystemEntity> build() => <FileSystemEntity>[];
+  
+  Future<void> getFiles() async {
+    try {
+      final model = ref.read(modelManagerProvider);
+      Directory dir = Directory(ref.read(pathProvider));
+      List<FileSystemEntity> dirFiles = dir.listSync();
+      state= [];
+      for (FileSystemEntity file in dirFiles) {
+        if (!model.hidden) {
+          if (!basename(file.path).startsWith('.')) {
+            state = [...state, file];
+          }
+        } else {
+          state = [...state, file];
+        }
+      }
+      state = FileUtils.sortList(state, model.sort);
+    } catch (e) {
+      if (e.toString().contains('Permission denied')) {
+        Dialogs.showToast('Permission Denied! cannot access this Directory!');
+        ref.read(pathsProvider.notifier).removeLast();
+        ref.read(pathProvider.notifier).update(ref.read(pathsProvider).last);
+        getFiles();
+      }
+    }
+  }
 }

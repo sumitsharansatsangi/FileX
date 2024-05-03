@@ -49,13 +49,23 @@ class FileIcon extends StatelessWidget {
               builder: (context, ref, child) {
                 final thumbnail = ref.watch(getThumbnailProvider(file));
                 return thumbnail.when(data: (t) {
-                   if(t!=null){
+                  if (t != null) {
                     return Image.memory(t);
-                    }else{
-                      return const Icon(Icons.error);
-                    }
+                  } else {
+                    return Image.asset(
+            'assets/video-placeholder.png',
+            height: 40,
+            width: 40,
+            fit: BoxFit.cover,
+          );
+                  }
                 }, error: (a, b) {
-                  return const Text("Error");
+                  return Image.asset(
+            'assets/video-placeholder.png',
+            height: 40,
+            width: 40,
+            fit: BoxFit.cover,
+          );
                 }, loading: () {
                   return const Center(child: CircularProgressIndicator());
                 });

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:filex/widgets/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -134,15 +135,25 @@ class WhatsAppItem extends StatelessWidget {
                 builder: (context, ref, child) {
                   final thumbnail = ref.watch(getThumbnailProvider(path));
                   return thumbnail.when(data: (t) {
-                    if(t!=null){
-                    return Image.memory(t);
-                    }else{
-                      return const Icon(Icons.error);
+                    if (t != null) {
+                      return Image.memory(t);
+                    } else {
+                      return Image.asset(
+            'assets/video-placeholder.png',
+            height: 40,
+            width: 40,
+            fit: BoxFit.cover,
+          );
                     }
                   }, error: (a, b) {
-                    return const Text("Error");
+                    return Image.asset(
+            'assets/video-placeholder.png',
+            height: 40,
+            width: 40,
+            fit: BoxFit.cover,
+          );
                   }, loading: () {
-                    return const CircularProgressIndicator();
+                    return const CustomLoader();
                   });
                 },
               )
@@ -161,14 +172,12 @@ class WhatsAppItem extends StatelessWidget {
     );
   }
 
- Future<void> saveMedia(BuildContext context) async {
+  Future<void> saveMedia(BuildContext context) async {
     String rootPath = '/storage/emulated/0/';
     await Directory('$rootPath${AppStrings.appName}').create();
     await Directory('$rootPath${AppStrings.appName}/Whatsapp Status').create();
     await file.copy(
         '$rootPath${AppStrings.appName}/Whatsapp Status/${basename(path)}');
-    if(context.mounted) {
-      Dialogs.showToast(Text( 'Saved!', style: Theme.of(context).textTheme.titleLarge, ));
-    }
+      Dialogs.showToast('Saved!');
   }
 }

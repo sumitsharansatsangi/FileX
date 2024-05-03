@@ -1,10 +1,9 @@
 import 'dart:io';
+import 'package:filex/providers/core_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/providers/category_provider.dart';
 import 'package:filex/utils/dialogs.dart';
-import 'package:filex/utils/file_utils.dart';
 import 'package:filex/widgets/custom_divider.dart';
 import 'package:filex/widgets/dir_item.dart';
 import 'package:filex/widgets/file_item.dart';
@@ -16,101 +15,31 @@ import 'package:share_plus/share_plus.dart';
 import '../widgets/add_file_dialog.dart';
 import '../widgets/rename_file_dialog.dart';
 
-class Folder extends ConsumerStatefulWidget {
+class Folder extends ConsumerWidget {
   final String title;
-  final String path;
 
   const Folder({
     super.key,
     required this.title,
-    required this.path,
   });
 
   @override
-  FolderState createState() => FolderState();
-}
-
-class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
-  late String path;
-  List<String> paths = <String>[];
-
-  List<FileSystemEntity> files = <FileSystemEntity>[];
-  bool showHidden = false;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      getFiles();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final files = ref.watch(filesProvider);
+    final paths = ref.watch(pathsProvider);
+    final path = ref.watch(pathProvider);
+    if(files.isEmpty){
+      return Image.asset("assets/no_files_found.png");
     }
-  }
-
-  getFiles() async {
-    try {
-   final model = ref.watch(modelManagerProvider);
-   model.whenData((value) {
-      Directory dir = Directory(path);
-      List<FileSystemEntity> dirFiles = dir.listSync();
-      files.clear();
-      showHidden = value.model.hidden;
-      setState(() {});
-      for (FileSystemEntity file in dirFiles) {
-        if (!showHidden) {
-          if (!pathlib.basename(file.path).startsWith('.')) {
-            files.add(file);
-            setState(() {});
-          }
-        } else {
-          files.add(file);
-          setState(() {});
-        }
-      }
-
-      files = FileUtils.sortList(files, value.model.sort);
-
-   });
-      
-    } catch (e) {
-      if (e.toString().contains('Permission denied')) {
-        Dialogs.showToast( Text('Permission Denied! cannot access this Directory!', style: Theme.of(context).textTheme.titleLarge,));
-        navigateBack();
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    path = widget.path;
-    getFiles();
-    paths.add(widget.path);
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-  }
-
-  navigateBack() {
-    paths.removeLast();
-    path = paths.last;
-    setState(() {});
-    getFiles();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    
     return WillPopScope(
       onWillPop: () async {
         if (paths.length == 1) {
           return true;
         } else {
-          paths.removeLast();
-          setState(() {
-            path = paths.last;
-          });
-          getFiles();
+          ref.read(pathsProvider.notifier).removeLast();
+          ref.read(pathProvider.notifier).update(paths.last);
+          ref.read(filesProvider.notifier).getFiles();
           return false;
         }
       },
@@ -122,7 +51,11 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
               if (paths.length == 1) {
                 Navigator.pop(context);
               } else {
-                navigateBack();
+                ref.read(pathsProvider.notifier).removeLast();
+                ref
+                    .read(pathProvider.notifier)
+                    .update(ref.read(pathsProvider).last);
+                ref.read(filesProvider.notifier).getFiles();
               }
             },
           ),
@@ -131,9 +64,9 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(widget.title),
+              Text(title),
               Text(
-                path,
+                paths.last,
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -143,15 +76,14 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
           ),
           bottom: PathBar(
             paths: paths,
-            icon: widget.path.toString().contains('emulated')
+            icon: paths.last.toString().contains('emulated')
                 ? Feather.smartphone
                 : Icons.sd_card,
             onChanged: (index) {
               debugPrint(paths[index]);
-              path = paths[index];
-              paths.removeRange(index + 1, paths.length);
-              setState(() {});
-              getFiles();
+              ref.read(pathProvider.notifier).update(paths[index]);
+              ref.read(pathsProvider.notifier).removeRange(index + 1);
+              ref.read(filesProvider.notifier).getFiles();
             },
           ),
           actions: <Widget>[
@@ -161,7 +93,7 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
                   context: context,
                   builder: (context) => const SortSheet(),
                 );
-                getFiles();
+                ref.read(filesProvider.notifier).getFiles();
               },
               tooltip: 'Sort by',
               icon: const Icon(Icons.sort),
@@ -181,18 +113,19 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
                   popTap: (v) async {
                     if (v == 0) {
                       await renameDialog(context, file.path, 'dir');
+                      ref.read(filesProvider.notifier).getFiles();
                     } else if (v == 1) {
-                      await deleteFile(context,true, file);
+                      await deleteFile(true, file);
+                      ref.read(filesProvider.notifier).getFiles();
                     } else if (v == 2) {
                       await shareFile(true, file);
                     }
                   },
                   file: file,
                   tap: () {
-                    paths.add(file.path);
-                    path = file.path;
-                    setState(() {});
-                    getFiles();
+                    ref.read(pathsProvider.notifier).addNew(file.path);
+                    ref.read(pathProvider.notifier).update(file.path);
+                    ref.read(filesProvider.notifier).getFiles();
                   },
                 );
               }
@@ -201,8 +134,10 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
                 popTap: (v) async {
                   if (v == 0) {
                     await renameDialog(context, file.path, 'file');
+                    ref.read(filesProvider.notifier).getFiles();
                   } else if (v == 1) {
-                    await deleteFile(context, false, file);
+                    await deleteFile(false, file);
+                    ref.read(filesProvider.notifier).getFiles();
                   } else if (v == 2) {
                     await shareFile(false, file);
                   }
@@ -215,7 +150,10 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => addDialog(context, path),
+          onPressed: () async {
+            await addDialog(context, path);
+            ref.read(filesProvider.notifier).getFiles();
+          },
           tooltip: 'Add Folder',
           child: const Icon(Feather.plus),
         ),
@@ -244,40 +182,34 @@ class FolderState extends ConsumerState<Folder> with WidgetsBindingObserver {
     }
   }
 
-  deleteFile(BuildContext context, bool directory, var file) async {
+  Future<void> deleteFile(bool directory, var file) async {
     try {
       if (directory) {
         await Directory(file.path).delete(recursive: true);
       } else {
         await File(file.path).delete(recursive: true);
       }
-      if(context.mounted) {
-        Dialogs.showToast( Text('Delete Successful', style: Theme.of(context).textTheme.titleLarge,));
-      }
+      Dialogs.showToast('Delete Successful');
     } catch (e) {
       debugPrint(e.toString());
       if (e.toString().contains('Permission denied')) {
-        if(context.mounted) {
-          Dialogs.showToast( Text('Cannot write to this Storage device!',  style: Theme.of(context).textTheme.titleLarge,));
-        }
+        Dialogs.showToast('Cannot write to this Storage device!');
       }
     }
-    getFiles();
   }
 
-  addDialog(BuildContext context, String path) async {
+  Future<void> addDialog(BuildContext context, String path) async {
     await showDialog(
       context: context,
       builder: (context) => AddFileDialog(path: path),
     );
-    getFiles();
   }
 
-  renameDialog(BuildContext context, String path, String type) async {
+  Future<void> renameDialog(
+      BuildContext context, String path, String type) async {
     await showDialog(
       context: context,
       builder: (context) => RenameFileDialog(path: path, type: type),
     );
-    getFiles();
   }
 }

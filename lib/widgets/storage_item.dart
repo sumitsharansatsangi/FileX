@@ -1,10 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:filex/providers/core_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:filex/screens/folder.dart';
 import 'package:filex/utils/file_utils.dart';
 import 'package:filex/utils/navigate.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class StorageItem extends StatelessWidget {
+class StorageItem extends ConsumerWidget {
   final double percent;
   final String title;
   final String path;
@@ -13,7 +15,8 @@ class StorageItem extends StatelessWidget {
   final int usedSpace;
   final int totalSpace;
 
-  const StorageItem({super.key, 
+  const StorageItem({
+    super.key,
     required this.percent,
     required this.title,
     required this.path,
@@ -24,12 +27,15 @@ class StorageItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       onTap: () {
+        ref.read(pathProvider.notifier).update(path);
+        ref.read(filesProvider.notifier).getFiles();
+        ref.read(pathsProvider.notifier).addNew(path);
         Navigate.pushPage(
           context,
-          Folder(title: title, path: path),
+          Folder(title: title),
         );
       },
       contentPadding: const EdgeInsets.only(right: 20),

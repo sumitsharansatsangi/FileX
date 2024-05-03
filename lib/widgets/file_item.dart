@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/material.dart';
 import 'package:filex/utils/file_utils.dart';
 import 'package:open_filex/open_filex.dart';

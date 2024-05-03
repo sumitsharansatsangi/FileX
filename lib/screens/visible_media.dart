@@ -8,10 +8,10 @@ import 'package:filex/widgets/file_icon.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:open_filex/open_filex.dart';
 
-class Images extends ConsumerWidget {
+class VisibleMedia extends ConsumerWidget {
   final String title;
 
-  const Images({
+  const VisibleMedia({
     super.key,
     required this.title,
   });
@@ -19,77 +19,73 @@ class Images extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageTabs = ref.watch(imageTabsProvider);
-    final List<String> images ;
-    if(title.toLowerCase() == "images"){
+    final List<String> images;
+    if (title.toLowerCase() == "images") {
       images = ref.watch(imageProvider('image'));
-    }else{
-       images = ref.watch(imageProvider('video'));
+    } else {
+      images = ref.watch(imageProvider('video'));
     }
     final currentFiles = ref.watch(currentFileProvider);
-    final currentFilesNotifier = ref.watch(currentFileProvider.notifier);
-    
-    if(images.isEmpty)  {
+
+    if (images.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    
+
     return DefaultTabController(
-          length: imageTabs.length,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-              bottom: TabBar(
-                indicatorColor: Theme.of(context).colorScheme.primaryContainer,
-                labelColor: Theme.of(context).colorScheme.primaryContainer,
-                unselectedLabelColor:
-                    Theme.of(context).textTheme.titleSmall!.color,
-                isScrollable: imageTabs.length < 3 ? false : true,
-                tabs: Constants.map<Widget>(
-                  imageTabs,
-                  (index, label) {
-                    return Tab(text: '$label');
-                  },
-                ),
-                onTap: (val) => currentFilesNotifier.switchCurrentFiles(
-                    images, imageTabs[val]),
-              ),
+      length: imageTabs.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          bottom: TabBar(
+            indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+            labelColor: Theme.of(context).colorScheme.primaryContainer,
+            unselectedLabelColor: Theme.of(context).textTheme.titleSmall!.color,
+            isScrollable: imageTabs.length < 3 ? false : true,
+            tabs: Constants.map<Widget>(
+              imageTabs,
+              (index, label) {
+                return Tab(text: '$label');
+              },
             ),
-            body: Visibility(
-              visible: images.isNotEmpty,
-              replacement: const Center(child: Text('No Files Found')),
-              child: TabBarView(
-                children: Constants.map<Widget>(
-                  imageTabs,
-                  (index, label) {
-                    List l = currentFiles;
-                    return CustomScrollView(
-                      primary: false,
-                      slivers: <Widget>[
-                        SliverPadding(
-                          padding: const EdgeInsets.all(10.0),
-                          sliver: SliverGrid.count(
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 5.0,
-                            crossAxisCount: 2,
-                            children: Constants.map(
-                              index == 0
-                                  ? images
-                                  : l.reversed.toList(),
-                              (index, item) {
-                                String mimeType = mime(item) ?? '';
-                                return _MediaTile(
-                                    file: item, mimeType: mimeType);
-                              },
-                            ),
-                          ),
+            onTap: (val) => ref
+                .read(currentFileProvider.notifier)
+                .switchCurrentFiles(images, imageTabs[val]),
+          ),
+        ),
+        body: Visibility(
+          visible: images.isNotEmpty,
+          replacement: const Center(child: Text('No Files Found')),
+          child: TabBarView(
+            children: Constants.map<Widget>(
+              imageTabs,
+              (index, label) {
+                List l = currentFiles;
+                return CustomScrollView(
+                  primary: false,
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: const EdgeInsets.all(10.0),
+                      sliver: SliverGrid.count(
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0,
+                        crossAxisCount: 2,
+                        children: Constants.map(
+                          index == 0 ? images : l.reversed.toList(),
+                          (index, item) {
+                            String mimeType = mime(item) ?? '';
+                            return _MediaTile(file: item, mimeType: mimeType);
+                          },
                         ),
-                      ],
-                    );
-                  },
-                ),
-              ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-        );
+        ),
+      ),
+    );
   }
 }
 

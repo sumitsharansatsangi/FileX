@@ -37,7 +37,7 @@ dependencies:
     git: https://github.com/sumitsharansatsangi/flutter_plugin_device_apps.git
   video_thumbnail:
     git: https://github.com/kumsumit/video_thumbnail.git
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.5.1
   percent_indicator:
     git: https://github.com/diegoveloper/flutter_percent_indicator.git
@@ -61,6 +61,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
   
 flutter_native_splash:
   color: "#129389"
