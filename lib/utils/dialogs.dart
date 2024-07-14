@@ -44,13 +44,13 @@ class Dialogs {
                       onPressed: () => Navigator.pop(context),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                        shape: MaterialStateProperty.all(
+                            WidgetStateProperty.all<Color>(Colors.white),
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),
-                        side: MaterialStateProperty.all(
+                        side: WidgetStateProperty.all(
                           BorderSide(
                               color: Theme.of(context).colorScheme.secondary),
                         ),
@@ -69,9 +69,9 @@ class Dialogs {
                     child: ElevatedButton(
                       onPressed: () => exit(0),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
+                        backgroundColor: WidgetStateProperty.all<Color>(
                             Theme.of(context).colorScheme.secondary),
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),

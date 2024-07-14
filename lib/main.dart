@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
         backgroundColor: colorScheme.primaryContainer,
         indicatorColor: colorScheme.onSecondary.withOpacity(0.5),
         iconTheme:
-            MaterialStatePropertyAll(IconThemeData(color: colorScheme.primary)),
+            WidgetStatePropertyAll(IconThemeData(color: colorScheme.primary)),
         labelTextStyle:
-            MaterialStatePropertyAll(TextStyle(color: colorScheme.primary)),
+            WidgetStatePropertyAll(TextStyle(color: colorScheme.primary)),
       ),
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -67,13 +67,13 @@ class MyApp extends StatelessWidget {
           titleMedium: TextStyle(color: colorScheme.secondaryContainer),
           titleSmall: TextStyle(color: colorScheme.secondaryContainer)),
       iconTheme: IconThemeData(color: colorScheme.primaryContainer),
-      listTileTheme: ListTileThemeData(iconColor: colorScheme.surfaceVariant),
+      listTileTheme: ListTileThemeData(iconColor: colorScheme.surfaceContainerHighest),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.secondary,
         indicatorColor: colorScheme.onSecondary.withOpacity(0.3),
-        iconTheme: MaterialStatePropertyAll(
+        iconTheme: WidgetStatePropertyAll(
             IconThemeData(color: colorScheme.onInverseSurface)),
-        labelTextStyle: MaterialStatePropertyAll(
+        labelTextStyle: WidgetStatePropertyAll(
             TextStyle(color: colorScheme.onInverseSurface)),
       ),
       appBarTheme: AppBarTheme(

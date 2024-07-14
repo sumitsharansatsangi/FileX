@@ -55,14 +55,14 @@ class RenameFileDialogState extends State<RenameFileDialog> {
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
+                        backgroundColor: WidgetStateProperty.all<Color>(
                             Theme.of(context).colorScheme.secondaryContainer),
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),
-                        side: MaterialStateProperty.all(
+                        side: WidgetStateProperty.all(
                           BorderSide(
                               color: Theme.of(context).colorScheme.secondary),
                         ),
@@ -133,9 +133,9 @@ class RenameFileDialogState extends State<RenameFileDialog> {
                         }
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
+                        backgroundColor: WidgetStateProperty.all<Color>(
                             Theme.of(context).colorScheme.secondary),
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
