@@ -3,7 +3,7 @@
     teal{color:teal}
 </style>    
 
-A simple File Explorer(Still very buggy) made with Flutter.
+A <span style ="color:teal;">simple File Explorer</span> (Still very buggy) made with Flutter.
 <br>
 <br>
 To download <teal>apk</teal>: 
