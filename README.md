@@ -1,9 +1,12 @@
 # FileX (WIP)
+<style>
+    teal{color:teal}
+</style>    
 
 A simple File Explorer(Still very buggy) made with Flutter.
 <br>
 <br>
-To download apk: 
+To download <teal>apk</teal>: 
 - Tap on the button below(it will take you to another page)
 - Scroll down the page to download `apk-release.apk`
 <br>
