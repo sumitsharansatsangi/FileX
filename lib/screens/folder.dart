@@ -85,13 +85,14 @@ class Folder extends ConsumerWidget {
               ref.read(pathsProvider.notifier).removeRange(index + 1);
               ref.read(filesProvider.notifier).getFiles();
             },
-          ),
+          ), 
           actions: <Widget>[
             IconButton(
               onPressed: () async {
                 await showModalBottomSheet(
                   context: context,
                   builder: (context) => const SortSheet(),
+                  backgroundColor:Theme.of(context).colorScheme.brightness==Brightness.dark ? Colors.teal.shade900:Colors.teal.shade100
                 );
                 ref.read(filesProvider.notifier).getFiles();
               },

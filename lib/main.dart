@@ -22,11 +22,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.fromSeed(
         seedColor: const Color.fromRGBO(178, 216, 216, 100));
-
+    final darkColorScheme = ColorScheme.fromSeed(
+      brightness: Brightness.dark,
+        seedColor: const Color.fromRGBO(178, 216, 216, 100));
     final ThemeData lightTheme = ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: colorScheme.surface,
+      bottomSheetTheme: BottomSheetThemeData(
+       backgroundColor:  Theme.of(context).colorScheme.onPrimaryContainer
+      ),
       iconButtonTheme: IconButtonThemeData(
           style: IconButton.styleFrom(
         foregroundColor: colorScheme.primary,
@@ -57,7 +62,7 @@ class MyApp extends StatelessWidget {
 
     final ThemeData darkTheme = ThemeData(
       useMaterial3: true,
-      colorScheme: colorScheme,
+      colorScheme: darkColorScheme,
       scaffoldBackgroundColor: colorScheme.onSurface,
       iconButtonTheme: IconButtonThemeData(
           style: IconButton.styleFrom(
