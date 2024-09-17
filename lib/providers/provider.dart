@@ -21,7 +21,8 @@ part 'provider.g.dart';
 @Riverpod(keepAlive: true)
 Future<Isar> isarInstance(IsarInstanceRef ref) async {
   final dir = await getApplicationDocumentsDirectory();
-  return Isar.open([ModelSchema], directory: dir.path);
+  await Isar.initialize();
+  return Isar.open(schemas:[ModelSchema], directory: dir.path);
 }
 
 @Riverpod(keepAlive: true)
@@ -45,41 +46,38 @@ class ModelManager extends _$ModelManager {
   @override
   Model build() {
     readDatabase();
-    return Model()
-      ..darkTheme = true
-      ..hidden = false
-      ..sort = 0;
+    return Model(1,true, false, 0);
   }
 
   Future<void> readDatabase() async {
     final isar = await ref.read(isarInstanceProvider.future);
-    final model = await isar.models.get(1);
+    final model = isar.models.get(1);
     if (model != null) {
       state = model;
     }
   }
 
   Future<void> changeTheme(bool darkTheme) async {
-    state = state.copyWith(darkTheme: darkTheme);
+    state = Model(state.id,darkTheme, state.hidden,state.sort);
     final isar = await ref.read(isarInstanceProvider.future);
-    await isar.writeTxn(() async {
-      await isar.models.put(state);
+     isar.write((isar) {
+      isar.models.put(state);
     });
   }
 
   Future<void> changeSort(int sort) async {
-    state = state.copyWith(sort: sort);
+    state = Model(state.id,state.darkTheme, state.hidden, sort);
     final isar = await ref.read(isarInstanceProvider.future);
-    await isar.writeTxn(() async {
-      await isar.models.put(state);
+    isar.write((isar){
+      isar.models.put(state);
     });
   }
 
   Future<void> changeHidden(bool hidden) async {
-    state = state.copyWith(hidden: hidden);
+   state = Model(state.id,state.darkTheme, hidden,state.sort);
     final isar = await ref.read(isarInstanceProvider.future);
-    await isar.writeTxn(() async {
-      await isar.models.put(state);
+    isar.write((isar){
+      isar.models.put(state);
     });
   }
 }
@@ -115,18 +113,6 @@ Future<Uint8List?> getThumbnail(GetThumbnailRef ref, String file) async {
 }
 
 @riverpod
-class DownloadTabs extends _$DownloadTabs {
-  @override
-  List<String> build() {
-    return ['All'];
-  }
-
-  void makeUnique() {
-    state = state.toSet().toList();
-  }
-}
-
-@riverpod
 class AudioTabs extends _$AudioTabs {
   @override
   List<String> build() {
@@ -146,8 +132,7 @@ class CurrentFile extends _$CurrentFile {
   }
 
   Future<void> switchCurrentFiles(List list, String label) async {
-    List<String> l = await compute(getTabImages, [list, label]);
-    state = l.map((e) => e).toList();
+    state = await compute(getTabImages, [list, label]);
   }
 
   List<String> getTabImages(List item) {
@@ -155,8 +140,10 @@ class CurrentFile extends _$CurrentFile {
     String label = item[1];
     List<String> files = [];
     for (final file in items) {
-      if ('${file.split('/')[file.split('/').length - 2]}' == label) {
+      String l='${file.split('/')[file.split('/').length - 2]}';
+      if (l == label) {
         files.add(file);
+        //  print([file,label,'${file.split('/')[file.split('/').length - 2]}' ]);
       }
     }
     return files;
@@ -281,13 +268,9 @@ Future<List<String>> download(DownloadRef ref) async {
       debugPrint(files.toString());
       for (var file in files) {
         if (FileSystemEntity.isFileSync(file.path)) {
-          downloads.add(file.path);
-          ref
-              .read(downloadTabsProvider)
-              .add(file.path.split('/')[file.path.split('/').length - 2]);
+          downloads.add(file.path); 
         }
       }
-      ref.read(downloadTabsProvider.notifier).makeUnique();
     }
   }
   return downloads;

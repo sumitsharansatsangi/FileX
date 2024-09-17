@@ -40,7 +40,7 @@ class VisibleMedia extends ConsumerWidget {
             indicatorColor: Theme.of(context).colorScheme.primaryContainer,
             labelColor: Theme.of(context).colorScheme.primaryContainer,
             unselectedLabelColor: Theme.of(context).textTheme.titleSmall!.color,
-            isScrollable: imageTabs.length < 3 ? false : true,
+            isScrollable:  true,
             tabs: Constants.map<Widget>(
               imageTabs,
               (index, label) {
@@ -130,7 +130,7 @@ class _MediaTile extends StatelessWidget {
                           const Icon(
                             Icons.play_circle_filled,
                             color: Colors.white,
-                            size: 16,
+                           size: 16,
                           ),
                         ],
                       )

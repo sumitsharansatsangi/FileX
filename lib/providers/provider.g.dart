@@ -6,7 +6,7 @@ part of 'provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$isarInstanceHash() => r'3bbbf5aa7cbc90053585882cd5d49de7af5cc384';
+String _$isarInstanceHash() => r'a7c8a5b9a37fefef9bf6da8fddebba65d85aa2ab';
 
 /// See also [isarInstance].
 @ProviderFor(isarInstance)
@@ -426,7 +426,7 @@ class _GetAudioProviderElement extends AutoDisposeProviderElement<void>
   String get type => (origin as GetAudioProvider).type;
 }
 
-String _$downloadHash() => r'a435c351f7d2036ed662ced330a5825e52f7f392';
+String _$downloadHash() => r'c134a6c0d4415b0993148d90a62230f027246e1f';
 
 /// See also [download].
 @ProviderFor(download)
@@ -613,7 +613,7 @@ final themeModeManagerProvider =
 );
 
 typedef _$ThemeModeManager = Notifier<ThemeMode>;
-String _$modelManagerHash() => r'94ddb79d8702cbb115845cafe4db01930fda061a';
+String _$modelManagerHash() => r'f99db5ef207b7ce9b35a6363a722ea39edadd511';
 
 /// See also [ModelManager].
 @ProviderFor(ModelManager)
@@ -627,21 +627,6 @@ final modelManagerProvider = NotifierProvider<ModelManager, Model>.internal(
 );
 
 typedef _$ModelManager = Notifier<Model>;
-String _$downloadTabsHash() => r'9eb2e3c63a37288399e00e5c2d438849e1f9a854';
-
-/// See also [DownloadTabs].
-@ProviderFor(DownloadTabs)
-final downloadTabsProvider =
-    AutoDisposeNotifierProvider<DownloadTabs, List<String>>.internal(
-  DownloadTabs.new,
-  name: r'downloadTabsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$downloadTabsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$DownloadTabs = AutoDisposeNotifier<List<String>>;
 String _$audioTabsHash() => r'5d4848a54d9fa0c4b3721abd72c41e518fd8a790';
 
 /// See also [AudioTabs].

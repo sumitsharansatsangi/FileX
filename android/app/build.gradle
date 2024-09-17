@@ -32,7 +32,7 @@ if (flutterVersionName == null) {
 android {
     compileSdk 34
     namespace "com.kumpali.filex"
-    ndkVersion '26.2.11394342'
+    ndkVersion '27.1.12297006'
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }

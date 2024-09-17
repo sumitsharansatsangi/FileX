@@ -3,464 +3,607 @@
 part of 'model.dart';
 
 // **************************************************************************
-// IsarCollectionGenerator
+// _IsarCollectionGenerator
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+// ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: type=lint
 
 extension GetModelCollection on Isar {
-  IsarCollection<Model> get models => this.collection();
+  IsarCollection<int, Model> get models => this.collection();
 }
 
-const ModelSchema = CollectionSchema(
-  name: r'Model',
-  id: -3989302092090443675,
-  properties: {
-    r'darkTheme': PropertySchema(
-      id: 0,
-      name: r'darkTheme',
-      type: IsarType.bool,
-    ),
-    r'hidden': PropertySchema(
-      id: 1,
-      name: r'hidden',
-      type: IsarType.bool,
-    ),
-    r'sort': PropertySchema(
-      id: 2,
-      name: r'sort',
-      type: IsarType.long,
-    )
-  },
-  estimateSize: _modelEstimateSize,
-  serialize: _modelSerialize,
-  deserialize: _modelDeserialize,
-  deserializeProp: _modelDeserializeProp,
-  idName: r'id',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
-  getId: _modelGetId,
-  getLinks: _modelGetLinks,
-  attach: _modelAttach,
-  version: '3.1.0+1',
+const ModelSchema = IsarGeneratedSchema(
+  schema: IsarSchema(
+    name: 'Model',
+    idName: 'id',
+    embedded: false,
+    properties: [
+      IsarPropertySchema(
+        name: 'darkTheme',
+        type: IsarType.bool,
+      ),
+      IsarPropertySchema(
+        name: 'hidden',
+        type: IsarType.bool,
+      ),
+      IsarPropertySchema(
+        name: 'sort',
+        type: IsarType.long,
+      ),
+    ],
+    indexes: [],
+  ),
+  converter: IsarObjectConverter<int, Model>(
+    serialize: serializeModel,
+    deserialize: deserializeModel,
+    deserializeProperty: deserializeModelProp,
+  ),
+  embeddedSchemas: [],
 );
 
-int _modelEstimateSize(
-  Model object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  return bytesCount;
+@isarProtected
+int serializeModel(IsarWriter writer, Model object) {
+  IsarCore.writeBool(writer, 1, object.darkTheme);
+  IsarCore.writeBool(writer, 2, object.hidden);
+  IsarCore.writeLong(writer, 3, object.sort);
+  return object.id;
 }
 
-void _modelSerialize(
-  Model object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeBool(offsets[0], object.darkTheme);
-  writer.writeBool(offsets[1], object.hidden);
-  writer.writeLong(offsets[2], object.sort);
-}
-
-Model _modelDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  final object = Model();
-  object.darkTheme = reader.readBool(offsets[0]);
-  object.hidden = reader.readBool(offsets[1]);
-  object.id = id;
-  object.sort = reader.readLong(offsets[2]);
+@isarProtected
+Model deserializeModel(IsarReader reader) {
+  final int _id;
+  _id = IsarCore.readId(reader);
+  final bool _darkTheme;
+  _darkTheme = IsarCore.readBool(reader, 1);
+  final bool _hidden;
+  _hidden = IsarCore.readBool(reader, 2);
+  final int _sort;
+  _sort = IsarCore.readLong(reader, 3);
+  final object = Model(
+    _id,
+    _darkTheme,
+    _hidden,
+    _sort,
+  );
   return object;
 }
 
-P _modelDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+@isarProtected
+dynamic deserializeModelProp(IsarReader reader, int property) {
+  switch (property) {
     case 0:
-      return (reader.readBool(offset)) as P;
+      return IsarCore.readId(reader);
     case 1:
-      return (reader.readBool(offset)) as P;
+      return IsarCore.readBool(reader, 1);
     case 2:
-      return (reader.readLong(offset)) as P;
+      return IsarCore.readBool(reader, 2);
+    case 3:
+      return IsarCore.readLong(reader, 3);
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw ArgumentError('Unknown property: $property');
   }
 }
 
-Id _modelGetId(Model object) {
-  return object.id ?? Isar.autoIncrement;
+sealed class _ModelUpdate {
+  bool call({
+    required int id,
+    bool? darkTheme,
+    bool? hidden,
+    int? sort,
+  });
 }
 
-List<IsarLinkBase<dynamic>> _modelGetLinks(Model object) {
-  return [];
-}
+class _ModelUpdateImpl implements _ModelUpdate {
+  const _ModelUpdateImpl(this.collection);
 
-void _modelAttach(IsarCollection<dynamic> col, Id id, Model object) {
-  object.id = id;
-}
+  final IsarCollection<int, Model> collection;
 
-extension ModelQueryWhereSort on QueryBuilder<Model, Model, QWhere> {
-  QueryBuilder<Model, Model, QAfterWhere> anyId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(const IdWhereClause.any());
-    });
-  }
-}
-
-extension ModelQueryWhere on QueryBuilder<Model, Model, QWhereClause> {
-  QueryBuilder<Model, Model, QAfterWhereClause> idEqualTo(Id id) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterWhereClause> idNotEqualTo(Id id) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: id, includeLower: include),
-      );
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: id, includeUpper: include),
-      );
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterWhereClause> idBetween(
-    Id lowerId,
-    Id upperId, {
-    bool includeLower = true,
-    bool includeUpper = true,
+  @override
+  bool call({
+    required int id,
+    Object? darkTheme = ignore,
+    Object? hidden = ignore,
+    Object? sort = ignore,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+    return collection.updateProperties([
+          id
+        ], {
+          if (darkTheme != ignore) 1: darkTheme as bool?,
+          if (hidden != ignore) 2: hidden as bool?,
+          if (sort != ignore) 3: sort as int?,
+        }) >
+        0;
+  }
+}
+
+sealed class _ModelUpdateAll {
+  int call({
+    required List<int> id,
+    bool? darkTheme,
+    bool? hidden,
+    int? sort,
+  });
+}
+
+class _ModelUpdateAllImpl implements _ModelUpdateAll {
+  const _ModelUpdateAllImpl(this.collection);
+
+  final IsarCollection<int, Model> collection;
+
+  @override
+  int call({
+    required List<int> id,
+    Object? darkTheme = ignore,
+    Object? hidden = ignore,
+    Object? sort = ignore,
+  }) {
+    return collection.updateProperties(id, {
+      if (darkTheme != ignore) 1: darkTheme as bool?,
+      if (hidden != ignore) 2: hidden as bool?,
+      if (sort != ignore) 3: sort as int?,
     });
   }
+}
+
+extension ModelUpdate on IsarCollection<int, Model> {
+  _ModelUpdate get update => _ModelUpdateImpl(this);
+
+  _ModelUpdateAll get updateAll => _ModelUpdateAllImpl(this);
+}
+
+sealed class _ModelQueryUpdate {
+  int call({
+    bool? darkTheme,
+    bool? hidden,
+    int? sort,
+  });
+}
+
+class _ModelQueryUpdateImpl implements _ModelQueryUpdate {
+  const _ModelQueryUpdateImpl(this.query, {this.limit});
+
+  final IsarQuery<Model> query;
+  final int? limit;
+
+  @override
+  int call({
+    Object? darkTheme = ignore,
+    Object? hidden = ignore,
+    Object? sort = ignore,
+  }) {
+    return query.updateProperties(limit: limit, {
+      if (darkTheme != ignore) 1: darkTheme as bool?,
+      if (hidden != ignore) 2: hidden as bool?,
+      if (sort != ignore) 3: sort as int?,
+    });
+  }
+}
+
+extension ModelQueryUpdate on IsarQuery<Model> {
+  _ModelQueryUpdate get updateFirst => _ModelQueryUpdateImpl(this, limit: 1);
+
+  _ModelQueryUpdate get updateAll => _ModelQueryUpdateImpl(this);
+}
+
+class _ModelQueryBuilderUpdateImpl implements _ModelQueryUpdate {
+  const _ModelQueryBuilderUpdateImpl(this.query, {this.limit});
+
+  final QueryBuilder<Model, Model, QOperations> query;
+  final int? limit;
+
+  @override
+  int call({
+    Object? darkTheme = ignore,
+    Object? hidden = ignore,
+    Object? sort = ignore,
+  }) {
+    final q = query.build();
+    try {
+      return q.updateProperties(limit: limit, {
+        if (darkTheme != ignore) 1: darkTheme as bool?,
+        if (hidden != ignore) 2: hidden as bool?,
+        if (sort != ignore) 3: sort as int?,
+      });
+    } finally {
+      q.close();
+    }
+  }
+}
+
+extension ModelQueryBuilderUpdate on QueryBuilder<Model, Model, QOperations> {
+  _ModelQueryUpdate get updateFirst =>
+      _ModelQueryBuilderUpdateImpl(this, limit: 1);
+
+  _ModelQueryUpdate get updateAll => _ModelQueryBuilderUpdateImpl(this);
 }
 
 extension ModelQueryFilter on QueryBuilder<Model, Model, QFilterCondition> {
-  QueryBuilder<Model, Model, QAfterFilterCondition> darkThemeEqualTo(
-      bool value) {
+  QueryBuilder<Model, Model, QAfterFilterCondition> idEqualTo(
+    int value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'darkTheme',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterFilterCondition> hiddenEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'hidden',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterFilterCondition> idIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterFilterCondition> idIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterFilterCondition> idEqualTo(Id? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> idGreaterThan(
-    Id? value, {
-    bool include = false,
-  }) {
+    int value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> idGreaterThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> idLessThan(
-    Id? value, {
-    bool include = false,
-  }) {
+    int value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        LessCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> idLessThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> idBetween(
-    Id? lower,
-    Id? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
+    int lower,
+    int upper,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 0,
+          lower: lower,
+          upper: upper,
+        ),
+      );
     });
   }
 
-  QueryBuilder<Model, Model, QAfterFilterCondition> sortEqualTo(int value) {
+  QueryBuilder<Model, Model, QAfterFilterCondition> darkThemeEqualTo(
+    bool value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'sort',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> hiddenEqualTo(
+    bool value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> sortEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 3,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> sortGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+    int value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'sort',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 3,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> sortGreaterThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 3,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> sortLessThan(
-    int value, {
-    bool include = false,
-  }) {
+    int value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'sort',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        LessCondition(
+          property: 3,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterFilterCondition> sortLessThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 3,
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<Model, Model, QAfterFilterCondition> sortBetween(
     int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
+    int upper,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'sort',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 3,
+          lower: lower,
+          upper: upper,
+        ),
+      );
     });
   }
 }
 
 extension ModelQueryObject on QueryBuilder<Model, Model, QFilterCondition> {}
 
-extension ModelQueryLinks on QueryBuilder<Model, Model, QFilterCondition> {}
-
 extension ModelQuerySortBy on QueryBuilder<Model, Model, QSortBy> {
+  QueryBuilder<Model, Model, QAfterSortBy> sortById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0);
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterSortBy> sortByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0, sort: Sort.desc);
+    });
+  }
+
   QueryBuilder<Model, Model, QAfterSortBy> sortByDarkTheme() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'darkTheme', Sort.asc);
+      return query.addSortBy(1);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> sortByDarkThemeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'darkTheme', Sort.desc);
+      return query.addSortBy(1, sort: Sort.desc);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> sortByHidden() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hidden', Sort.asc);
+      return query.addSortBy(2);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> sortByHiddenDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hidden', Sort.desc);
+      return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> sortBySort() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sort', Sort.asc);
+      return query.addSortBy(3);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> sortBySortDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sort', Sort.desc);
+      return query.addSortBy(3, sort: Sort.desc);
     });
   }
 }
 
 extension ModelQuerySortThenBy on QueryBuilder<Model, Model, QSortThenBy> {
-  QueryBuilder<Model, Model, QAfterSortBy> thenByDarkTheme() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'darkTheme', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterSortBy> thenByDarkThemeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'darkTheme', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterSortBy> thenByHidden() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hidden', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Model, Model, QAfterSortBy> thenByHiddenDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'hidden', Sort.desc);
-    });
-  }
-
   QueryBuilder<Model, Model, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
+      return query.addSortBy(0);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
+      return query.addSortBy(0, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterSortBy> thenByDarkTheme() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1);
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterSortBy> thenByDarkThemeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterSortBy> thenByHidden() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2);
+    });
+  }
+
+  QueryBuilder<Model, Model, QAfterSortBy> thenByHiddenDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> thenBySort() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sort', Sort.asc);
+      return query.addSortBy(3);
     });
   }
 
   QueryBuilder<Model, Model, QAfterSortBy> thenBySortDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sort', Sort.desc);
+      return query.addSortBy(3, sort: Sort.desc);
     });
   }
 }
 
 extension ModelQueryWhereDistinct on QueryBuilder<Model, Model, QDistinct> {
-  QueryBuilder<Model, Model, QDistinct> distinctByDarkTheme() {
+  QueryBuilder<Model, Model, QAfterDistinct> distinctByDarkTheme() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'darkTheme');
+      return query.addDistinctBy(1);
     });
   }
 
-  QueryBuilder<Model, Model, QDistinct> distinctByHidden() {
+  QueryBuilder<Model, Model, QAfterDistinct> distinctByHidden() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'hidden');
+      return query.addDistinctBy(2);
     });
   }
 
-  QueryBuilder<Model, Model, QDistinct> distinctBySort() {
+  QueryBuilder<Model, Model, QAfterDistinct> distinctBySort() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'sort');
+      return query.addDistinctBy(3);
     });
   }
 }
 
-extension ModelQueryProperty on QueryBuilder<Model, Model, QQueryProperty> {
-  QueryBuilder<Model, int, QQueryOperations> idProperty() {
+extension ModelQueryProperty1 on QueryBuilder<Model, Model, QProperty> {
+  QueryBuilder<Model, int, QAfterProperty> idProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
+      return query.addProperty(0);
     });
   }
 
-  QueryBuilder<Model, bool, QQueryOperations> darkThemeProperty() {
+  QueryBuilder<Model, bool, QAfterProperty> darkThemeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'darkTheme');
+      return query.addProperty(1);
     });
   }
 
-  QueryBuilder<Model, bool, QQueryOperations> hiddenProperty() {
+  QueryBuilder<Model, bool, QAfterProperty> hiddenProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'hidden');
+      return query.addProperty(2);
     });
   }
 
-  QueryBuilder<Model, int, QQueryOperations> sortProperty() {
+  QueryBuilder<Model, int, QAfterProperty> sortProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'sort');
+      return query.addProperty(3);
+    });
+  }
+}
+
+extension ModelQueryProperty2<R> on QueryBuilder<Model, R, QAfterProperty> {
+  QueryBuilder<Model, (R, int), QAfterProperty> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(0);
+    });
+  }
+
+  QueryBuilder<Model, (R, bool), QAfterProperty> darkThemeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(1);
+    });
+  }
+
+  QueryBuilder<Model, (R, bool), QAfterProperty> hiddenProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(2);
+    });
+  }
+
+  QueryBuilder<Model, (R, int), QAfterProperty> sortProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(3);
+    });
+  }
+}
+
+extension ModelQueryProperty3<R1, R2>
+    on QueryBuilder<Model, (R1, R2), QAfterProperty> {
+  QueryBuilder<Model, (R1, R2, int), QOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(0);
+    });
+  }
+
+  QueryBuilder<Model, (R1, R2, bool), QOperations> darkThemeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(1);
+    });
+  }
+
+  QueryBuilder<Model, (R1, R2, bool), QOperations> hiddenProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(2);
+    });
+  }
+
+  QueryBuilder<Model, (R1, R2, int), QOperations> sortProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(3);
     });
   }
 }

@@ -64,6 +64,7 @@ class Browse extends StatelessWidget {
                 const CustomDivider(),
                 const SizedBox(height: 20.0),
                 const _SectionTitle('Recent Files'),
+
                 _RecentFiles(),
               ],
             ),
@@ -236,8 +237,9 @@ class _RecentFiles extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentfiles = ref.watch(recentFileProvider);
+    
     if (recentfiles.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: Text("No Data Found"));
     }
     return ListView.separated(
       padding: const EdgeInsets.only(right: 20),

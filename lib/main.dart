@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:filex/screens/ios_error.dart';
 import 'package:filex/utils/strings.dart';
 
+
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);

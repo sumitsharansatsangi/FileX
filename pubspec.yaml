@@ -1,20 +1,10 @@
 name: filex
 description: A new Flutter application.
 publish_to: none
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.3+3
 
 environment:
-  sdk: ">=3.3.4 <4.0.0"
+  sdk: ">=3.5.2 <4.0.0"
 
 dependencies:
   flutter:
@@ -27,12 +17,11 @@ dependencies:
   mime_type: ^1.0.0
   cherry_toast: ^1.10.0
   intl: ^0.19.0
-  open_filex: ^4.4.0
+  open_filex: ^4.5.0
   path_provider:
     git: https://github.com/kumsumit/path_provider.git
-  isar: ^3.1.0+1
-  isar_flutter_libs: 
-    git: https://github.com/kumsumit/isar_flutter_libs.git  
+  isar: ^4.0.0-dev.14
+  isar_flutter_libs: ^4.0.0-dev.14
   device_apps:
     git: https://github.com/sumitsharansatsangi/flutter_plugin_device_apps.git
   video_thumbnail:
@@ -51,10 +40,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  isar_generator:
-    git: https://github.com/kumsumit/isar_generator.git
   riverpod_generator: ^2.4.0
-  build_runner: ^2.4.9
+  build_runner: ^2.4.12
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.10
   flutter_lints: ^4.0.0
