@@ -22,7 +22,7 @@ part 'provider.g.dart';
 Future<Isar> isarInstance(IsarInstanceRef ref) async {
   final dir = await getApplicationDocumentsDirectory();
   await Isar.initialize();
-  return Isar.open(schemas:[ModelSchema], directory: dir.path);
+  return Isar.open(schemas: [ModelSchema], directory: dir.path);
 }
 
 @Riverpod(keepAlive: true)
@@ -46,7 +46,7 @@ class ModelManager extends _$ModelManager {
   @override
   Model build() {
     readDatabase();
-    return Model(1,true, false, 0);
+    return Model(1, true, false, 0);
   }
 
   Future<void> readDatabase() async {
@@ -58,25 +58,25 @@ class ModelManager extends _$ModelManager {
   }
 
   Future<void> changeTheme(bool darkTheme) async {
-    state = Model(state.id,darkTheme, state.hidden,state.sort);
+    state = Model(state.id, darkTheme, state.hidden, state.sort);
     final isar = await ref.read(isarInstanceProvider.future);
-     isar.write((isar) {
+    isar.write((isar) {
       isar.models.put(state);
     });
   }
 
   Future<void> changeSort(int sort) async {
-    state = Model(state.id,state.darkTheme, state.hidden, sort);
+    state = Model(state.id, state.darkTheme, state.hidden, sort);
     final isar = await ref.read(isarInstanceProvider.future);
-    isar.write((isar){
+    isar.write((isar) {
       isar.models.put(state);
     });
   }
 
   Future<void> changeHidden(bool hidden) async {
-   state = Model(state.id,state.darkTheme, hidden,state.sort);
+    state = Model(state.id, state.darkTheme, hidden, state.sort);
     final isar = await ref.read(isarInstanceProvider.future);
-    isar.write((isar){
+    isar.write((isar) {
       isar.models.put(state);
     });
   }
@@ -131,23 +131,26 @@ class CurrentFile extends _$CurrentFile {
     return <String>[];
   }
 
-  Future<void> switchCurrentFiles(List list, String label) async {
-    state = await compute(getTabImages, [list, label]);
+  Future<void> switchCurrentFiles(List<String> list, String label) async {
+    state = [
+      for (final l in list)
+        if (basename(dirname(l)) == label) l
+    ];
   }
 
-  List<String> getTabImages(List item) {
-    List items = item[0];
-    String label = item[1];
-    List<String> files = [];
-    for (final file in items) {
-      String l='${file.split('/')[file.split('/').length - 2]}';
-      if (l == label) {
-        files.add(file);
-        //  print([file,label,'${file.split('/')[file.split('/').length - 2]}' ]);
-      }
-    }
-    return files;
-  }
+  // List<String> getTabImages(List<String> items, String label) {
+  //   List<String> files = [];
+  //   for (final file in items) {
+  //     String l = file.split('/')[file.split('/').length - 2];
+  //     if (l == label) {
+  //       files.add(file);
+  //       debugPrint(file);
+  //       debugPrint(label);
+  //       debugPrint(l);
+  //     }
+  //   }
+  //   return files;
+  // }
 }
 
 @riverpod
@@ -268,7 +271,7 @@ Future<List<String>> download(DownloadRef ref) async {
       debugPrint(files.toString());
       for (var file in files) {
         if (FileSystemEntity.isFileSync(file.path)) {
-          downloads.add(file.path); 
+          downloads.add(file.path);
         }
       }
     }
