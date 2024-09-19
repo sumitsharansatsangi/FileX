@@ -1,19 +1,14 @@
 import 'dart:io';
 import 'package:filex/providers/provider.dart';
+import 'package:filex/utils/operation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:filex/utils/dialogs.dart';
 import 'package:filex/widgets/custom_divider.dart';
 import 'package:filex/widgets/dir_item.dart';
 import 'package:filex/widgets/file_item.dart';
 import 'package:filex/widgets/path_bar.dart';
 import 'package:filex/widgets/sort_sheet.dart';
-import 'package:path/path.dart' as pathlib;
-import 'package:share_plus/share_plus.dart';
-
-import '../widgets/add_file_dialog.dart';
-import '../widgets/rename_file_dialog.dart';
 
 class Folder extends ConsumerWidget {
   final String title;
@@ -159,58 +154,6 @@ class Folder extends ConsumerWidget {
           child: const Icon(Feather.plus),
         ),
       ),
-    );
-  }
-
-  shareFile(bool directory, var file) async {
-    try {
-      if (directory) {
-        final fileList = Directory(file.path).list(recursive: true);
-        List<XFile> files = [];
-        await for (final file in fileList) {
-          if (FileSystemEntity.isFileSync(file.path)) {
-            if (pathlib.basename(file.path).startsWith('.')) {
-              files.add(XFile(file.path));
-            }
-          }
-        }
-        await Share.shareXFiles(files);
-      } else {
-        await Share.shareXFiles([XFile(file.path)]);
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  Future<void> deleteFile(bool directory, var file) async {
-    try {
-      if (directory) {
-        await Directory(file.path).delete(recursive: true);
-      } else {
-        await File(file.path).delete(recursive: true);
-      }
-      Dialogs.showToast('Delete Successful');
-    } catch (e) {
-      debugPrint(e.toString());
-      if (e.toString().contains('Permission denied')) {
-        Dialogs.showToast('Cannot write to this Storage device!');
-      }
-    }
-  }
-
-  Future<void> addDialog(BuildContext context, String path) async {
-    await showDialog(
-      context: context,
-      builder: (context) => AddFileDialog(path: path),
-    );
-  }
-
-  Future<void> renameDialog(
-      BuildContext context, String path, String type) async {
-    await showDialog(
-      context: context,
-      builder: (context) => RenameFileDialog(path: path, type: type),
     );
   }
 }

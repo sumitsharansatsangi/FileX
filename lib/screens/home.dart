@@ -7,6 +7,7 @@ import 'package:filex/utils/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'browse.dart';
+import 'gallery.dart';
 import 'settings.dart';
 
 class Home extends StatefulWidget {
@@ -23,6 +24,11 @@ class HomeScreenState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+      //  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarColor: Theme.of(context).brightness == Brightness.dark
+    //       ? Colors.white
+    //       : Colors.black,
+    // ));
     if (_notPermission) {
       return Scaffold(
           backgroundColor: const Color.fromARGB(200, 18, 147, 137),
@@ -49,6 +55,7 @@ class HomeScreenState extends State<Home> {
             onPageChanged: onPageChanged,
             children: const <Widget>[
               Browse(),
+              Gallery(),
               Settings(),
             ],
           ),
@@ -58,6 +65,10 @@ class HomeScreenState extends State<Home> {
               NavigationDestination(
                 icon: Icon(Feather.folder),
                 label: 'Browse',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.image_outlined),
+                label: 'Gallery',
               ),
               NavigationDestination(
                 icon: Icon(Feather.settings),

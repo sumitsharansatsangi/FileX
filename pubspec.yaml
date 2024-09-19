@@ -20,8 +20,10 @@ dependencies:
   open_filex: ^4.5.0
   path_provider:
     git: https://github.com/kumsumit/path_provider.git
-  isar: ^4.0.0-dev.14
-  isar_flutter_libs: ^4.0.0-dev.14
+  isar:
+    git: https://github.com/kumsumit/isar.git
+  isar_flutter_libs:
+    git: https://github.com/kumsumit/isar_flutter_libs.git
   device_apps:
     git: https://github.com/sumitsharansatsangi/flutter_plugin_device_apps.git
   video_thumbnail:
@@ -36,6 +38,10 @@ dependencies:
   flutter_native_splash: ^2.4.0
   share_plus:
     git: https://github.com/kumsumit/share_plus.git
+  gallery_picker:
+    git: https://github.com/kumsumit/gallery_picker.git
+  pro_image_editor:
+    git: https://github.com/kumsumit/pro_image_editor.git
 
 dev_dependencies:
   flutter_test:
