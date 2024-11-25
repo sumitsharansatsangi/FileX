@@ -5,7 +5,7 @@
 -keep class io.flutter.view.** { *; }
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
-
+-keep class org.videolan.libvlc.** { *; }
 -dontwarn io.flutter.embedding.**
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 # Other

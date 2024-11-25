@@ -4,94 +4,49 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
-}
-
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-
 android {
-    compileSdk 34
     namespace "com.kumpali.filex"
-    ndkVersion '27.1.12297006'
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-      compileOptions {
+    compileSdk 35
+    ndkVersion '28.0.12433566'
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.kumpali.filex"
-        minSdkVersion 23
-        targetSdkVersion 34
-        //  ndk {
-        //     // abiFilters "armeabi", "x86", "armeabi-v7a"
-        //    abiFilters "armeabi" "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-        // }
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        release {
-             keyAlias keystoreProperties['keyAlias']
-             keyPassword keystoreProperties['keyPassword']
-             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-             storePassword keystoreProperties['storePassword']
-        }
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        minSdk flutter.minSdkVersion
+        targetSdk 35
+        multiDexEnabled true
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
-             minifyEnabled = true
-            shrinkResources = true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "proguard-rules.pro"
-            // //Other parameters
-            debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
-            // // signingConfig playStoreConfig //Add your own signing config
-            // pseudoLocalesEnabled false
-        }
-        debug {
-            signingConfig signingConfigs.release
-            // minifyEnabled true
-            // // useProguard true
-            // shrinkResources true
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
         }
     }
-    lint {
-        disable 'InvalidPackage'
+    packagingOptions {
+        jniLibs {
+            pickFirsts += ['lib/**/libc++_shared.so']
+        }
     }
+
 }
 
 flutter {
@@ -99,8 +54,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
